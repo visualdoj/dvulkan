@@ -1515,36 +1515,9 @@ type
   PFN_vkVoidFunction   = Pointer;
   PPFN_vkVoidFunction  =  ^PFN_vkVoidFunction;
   PPPFN_vkVoidFunction = ^PPFN_vkVoidFunction;
-  VkClearColorValue   = Pointer;
-  PVkClearColorValue  =  ^VkClearColorValue;
-  PPVkClearColorValue = ^PVkClearColorValue;
-  VkClearValue   = Pointer;
-  PVkClearValue  =  ^VkClearValue;
-  PPVkClearValue = ^PVkClearValue;
-  VkPerformanceCounterResultKHR   = Pointer;
-  PVkPerformanceCounterResultKHR  =  ^VkPerformanceCounterResultKHR;
-  PPVkPerformanceCounterResultKHR = ^PVkPerformanceCounterResultKHR;
-  VkPerformanceValueDataINTEL   = Pointer;
-  PVkPerformanceValueDataINTEL  =  ^VkPerformanceValueDataINTEL;
-  PPVkPerformanceValueDataINTEL = ^PVkPerformanceValueDataINTEL;
-  VkPipelineExecutableStatisticValueKHR   = Pointer;
-  PVkPipelineExecutableStatisticValueKHR  =  ^VkPipelineExecutableStatisticValueKHR;
-  PPVkPipelineExecutableStatisticValueKHR = ^PVkPipelineExecutableStatisticValueKHR;
-  VkDeviceOrHostAddressKHR   = Pointer;
-  PVkDeviceOrHostAddressKHR  =  ^VkDeviceOrHostAddressKHR;
-  PPVkDeviceOrHostAddressKHR = ^PVkDeviceOrHostAddressKHR;
-  VkDeviceOrHostAddressConstKHR   = Pointer;
-  PVkDeviceOrHostAddressConstKHR  =  ^VkDeviceOrHostAddressConstKHR;
-  PPVkDeviceOrHostAddressConstKHR = ^PVkDeviceOrHostAddressConstKHR;
-  VkAccelerationStructureGeometryDataKHR   = Pointer;
-  PVkAccelerationStructureGeometryDataKHR  =  ^VkAccelerationStructureGeometryDataKHR;
-  PPVkAccelerationStructureGeometryDataKHR = ^PVkAccelerationStructureGeometryDataKHR;
   VkAccelerationStructureMotionInstanceTypeNV   = Int32;
   PVkAccelerationStructureMotionInstanceTypeNV  =  ^VkAccelerationStructureMotionInstanceTypeNV;
   PPVkAccelerationStructureMotionInstanceTypeNV = ^PVkAccelerationStructureMotionInstanceTypeNV;
-  VkAccelerationStructureMotionInstanceDataNV   = Pointer;
-  PVkAccelerationStructureMotionInstanceDataNV  =  ^VkAccelerationStructureMotionInstanceDataNV;
-  PPVkAccelerationStructureMotionInstanceDataNV = ^PVkAccelerationStructureMotionInstanceDataNV;
   VkRemoteAddressNV   = Pointer;
   PVkRemoteAddressNV  =  ^VkRemoteAddressNV;
   PPVkRemoteAddressNV = ^PVkRemoteAddressNV;
@@ -5522,6 +5495,7 @@ VkCommandBufferBeginInfo = record
 end;
 
 
+PVkClearValue = ^VkClearValue;
 PVkRenderPassBeginInfo  =  ^VkRenderPassBeginInfo;
 PPVkRenderPassBeginInfo = ^PVkRenderPassBeginInfo;
 VkRenderPassBeginInfo = record
@@ -5535,11 +5509,29 @@ VkRenderPassBeginInfo = record
 end;
 
 
+PVkClearColorValue  =  ^VkClearColorValue;
+PPVkClearColorValue = ^PVkClearColorValue;
+VkClearColorValue = record
+case Byte of
+  0: (float32: array[0 .. 4 - 1] of Single);
+  1: (int32: array[0 .. 4 - 1] of Int32);
+  2: (uint32: array[0 .. 4 - 1] of UInt32);
+end;
+
+
 PVkClearDepthStencilValue  =  ^VkClearDepthStencilValue;
 PPVkClearDepthStencilValue = ^PVkClearDepthStencilValue;
 VkClearDepthStencilValue = record
   depth: Single;
   stencil: UInt32;
+end;
+
+
+PPVkClearValue = ^PVkClearValue;
+VkClearValue = record
+case Byte of
+  0: (color: VkClearColorValue);
+  1: (depthStencil: VkClearDepthStencilValue);
 end;
 
 
@@ -6471,12 +6463,6 @@ VkPhysicalDeviceFeatures2 = record
 end;
 
 
-PVkPhysicalDeviceFeatures2KHR  =  ^VkPhysicalDeviceFeatures2KHR;
-PPVkPhysicalDeviceFeatures2KHR = ^PVkPhysicalDeviceFeatures2KHR;
-VkPhysicalDeviceFeatures2KHR = record
-end;
-
-
 PVkPhysicalDeviceProperties  =  ^VkPhysicalDeviceProperties;
 PPVkPhysicalDeviceProperties = ^PVkPhysicalDeviceProperties;
 VkPhysicalDeviceProperties = record
@@ -6501,12 +6487,6 @@ VkPhysicalDeviceProperties2 = record
 end;
 
 
-PVkPhysicalDeviceProperties2KHR  =  ^VkPhysicalDeviceProperties2KHR;
-PPVkPhysicalDeviceProperties2KHR = ^PVkPhysicalDeviceProperties2KHR;
-VkPhysicalDeviceProperties2KHR = record
-end;
-
-
 PVkFormatProperties2  =  ^VkFormatProperties2;
 PPVkFormatProperties2 = ^PVkFormatProperties2;
 VkFormatProperties2 = record
@@ -6516,24 +6496,12 @@ VkFormatProperties2 = record
 end;
 
 
-PVkFormatProperties2KHR  =  ^VkFormatProperties2KHR;
-PPVkFormatProperties2KHR = ^PVkFormatProperties2KHR;
-VkFormatProperties2KHR = record
-end;
-
-
 PVkImageFormatProperties2  =  ^VkImageFormatProperties2;
 PPVkImageFormatProperties2 = ^PVkImageFormatProperties2;
 VkImageFormatProperties2 = record
   sType: VkStructureType;
   pNext: Pointer;
   imageFormatProperties: VkImageFormatProperties;
-end;
-
-
-PVkImageFormatProperties2KHR  =  ^VkImageFormatProperties2KHR;
-PPVkImageFormatProperties2KHR = ^PVkImageFormatProperties2KHR;
-VkImageFormatProperties2KHR = record
 end;
 
 
@@ -6550,24 +6518,12 @@ VkPhysicalDeviceImageFormatInfo2 = record
 end;
 
 
-PVkPhysicalDeviceImageFormatInfo2KHR  =  ^VkPhysicalDeviceImageFormatInfo2KHR;
-PPVkPhysicalDeviceImageFormatInfo2KHR = ^PVkPhysicalDeviceImageFormatInfo2KHR;
-VkPhysicalDeviceImageFormatInfo2KHR = record
-end;
-
-
 PVkQueueFamilyProperties2  =  ^VkQueueFamilyProperties2;
 PPVkQueueFamilyProperties2 = ^PVkQueueFamilyProperties2;
 VkQueueFamilyProperties2 = record
   sType: VkStructureType;
   pNext: Pointer;
   queueFamilyProperties: VkQueueFamilyProperties;
-end;
-
-
-PVkQueueFamilyProperties2KHR  =  ^VkQueueFamilyProperties2KHR;
-PPVkQueueFamilyProperties2KHR = ^PVkQueueFamilyProperties2KHR;
-VkQueueFamilyProperties2KHR = record
 end;
 
 
@@ -6590,24 +6546,12 @@ VkPhysicalDeviceMemoryProperties2 = record
 end;
 
 
-PVkPhysicalDeviceMemoryProperties2KHR  =  ^VkPhysicalDeviceMemoryProperties2KHR;
-PPVkPhysicalDeviceMemoryProperties2KHR = ^PVkPhysicalDeviceMemoryProperties2KHR;
-VkPhysicalDeviceMemoryProperties2KHR = record
-end;
-
-
 PVkSparseImageFormatProperties2  =  ^VkSparseImageFormatProperties2;
 PPVkSparseImageFormatProperties2 = ^PVkSparseImageFormatProperties2;
 VkSparseImageFormatProperties2 = record
   sType: VkStructureType;
   pNext: Pointer;
   properties: VkSparseImageFormatProperties;
-end;
-
-
-PVkSparseImageFormatProperties2KHR  =  ^VkSparseImageFormatProperties2KHR;
-PPVkSparseImageFormatProperties2KHR = ^PVkSparseImageFormatProperties2KHR;
-VkSparseImageFormatProperties2KHR = record
 end;
 
 
@@ -6621,12 +6565,6 @@ VkPhysicalDeviceSparseImageFormatInfo2 = record
   samples: VkSampleCountFlagBits;
   usage: VkImageUsageFlags;
   tiling: VkImageTiling;
-end;
-
-
-PVkPhysicalDeviceSparseImageFormatInfo2KHR  =  ^VkPhysicalDeviceSparseImageFormatInfo2KHR;
-PPVkPhysicalDeviceSparseImageFormatInfo2KHR = ^PVkPhysicalDeviceSparseImageFormatInfo2KHR;
-VkPhysicalDeviceSparseImageFormatInfo2KHR = record
 end;
 
 
@@ -6649,12 +6587,6 @@ VkConformanceVersion = record
 end;
 
 
-PVkConformanceVersionKHR  =  ^VkConformanceVersionKHR;
-PPVkConformanceVersionKHR = ^PVkConformanceVersionKHR;
-VkConformanceVersionKHR = record
-end;
-
-
 PVkPhysicalDeviceDriverProperties  =  ^VkPhysicalDeviceDriverProperties;
 PPVkPhysicalDeviceDriverProperties = ^PVkPhysicalDeviceDriverProperties;
 VkPhysicalDeviceDriverProperties = record
@@ -6664,12 +6596,6 @@ VkPhysicalDeviceDriverProperties = record
   driverName: array[0 .. VK_MAX_DRIVER_NAME_SIZE - 1] of AnsiChar;
   driverInfo: array[0 .. VK_MAX_DRIVER_INFO_SIZE - 1] of AnsiChar;
   conformanceVersion: VkConformanceVersion;
-end;
-
-
-PVkPhysicalDeviceDriverPropertiesKHR  =  ^VkPhysicalDeviceDriverPropertiesKHR;
-PPVkPhysicalDeviceDriverPropertiesKHR = ^PVkPhysicalDeviceDriverPropertiesKHR;
-VkPhysicalDeviceDriverPropertiesKHR = record
 end;
 
 
@@ -6710,36 +6636,12 @@ VkPhysicalDeviceVariablePointersFeatures = record
 end;
 
 
-PVkPhysicalDeviceVariablePointersFeaturesKHR  =  ^VkPhysicalDeviceVariablePointersFeaturesKHR;
-PPVkPhysicalDeviceVariablePointersFeaturesKHR = ^PVkPhysicalDeviceVariablePointersFeaturesKHR;
-VkPhysicalDeviceVariablePointersFeaturesKHR = record
-end;
-
-
-PVkPhysicalDeviceVariablePointerFeaturesKHR  =  ^VkPhysicalDeviceVariablePointerFeaturesKHR;
-PPVkPhysicalDeviceVariablePointerFeaturesKHR = ^PVkPhysicalDeviceVariablePointerFeaturesKHR;
-VkPhysicalDeviceVariablePointerFeaturesKHR = record
-end;
-
-
-PVkPhysicalDeviceVariablePointerFeatures  =  ^VkPhysicalDeviceVariablePointerFeatures;
-PPVkPhysicalDeviceVariablePointerFeatures = ^PVkPhysicalDeviceVariablePointerFeatures;
-VkPhysicalDeviceVariablePointerFeatures = record
-end;
-
-
 PVkExternalMemoryProperties  =  ^VkExternalMemoryProperties;
 PPVkExternalMemoryProperties = ^PVkExternalMemoryProperties;
 VkExternalMemoryProperties = record
   externalMemoryFeatures: VkExternalMemoryFeatureFlags;
   exportFromImportedHandleTypes: VkExternalMemoryHandleTypeFlags;
   compatibleHandleTypes: VkExternalMemoryHandleTypeFlags;
-end;
-
-
-PVkExternalMemoryPropertiesKHR  =  ^VkExternalMemoryPropertiesKHR;
-PPVkExternalMemoryPropertiesKHR = ^PVkExternalMemoryPropertiesKHR;
-VkExternalMemoryPropertiesKHR = record
 end;
 
 
@@ -6752,24 +6654,12 @@ VkPhysicalDeviceExternalImageFormatInfo = record
 end;
 
 
-PVkPhysicalDeviceExternalImageFormatInfoKHR  =  ^VkPhysicalDeviceExternalImageFormatInfoKHR;
-PPVkPhysicalDeviceExternalImageFormatInfoKHR = ^PVkPhysicalDeviceExternalImageFormatInfoKHR;
-VkPhysicalDeviceExternalImageFormatInfoKHR = record
-end;
-
-
 PVkExternalImageFormatProperties  =  ^VkExternalImageFormatProperties;
 PPVkExternalImageFormatProperties = ^PVkExternalImageFormatProperties;
 VkExternalImageFormatProperties = record
   sType: VkStructureType;
   pNext: Pointer;
   externalMemoryProperties: VkExternalMemoryProperties;
-end;
-
-
-PVkExternalImageFormatPropertiesKHR  =  ^VkExternalImageFormatPropertiesKHR;
-PPVkExternalImageFormatPropertiesKHR = ^PVkExternalImageFormatPropertiesKHR;
-VkExternalImageFormatPropertiesKHR = record
 end;
 
 
@@ -6784,24 +6674,12 @@ VkPhysicalDeviceExternalBufferInfo = record
 end;
 
 
-PVkPhysicalDeviceExternalBufferInfoKHR  =  ^VkPhysicalDeviceExternalBufferInfoKHR;
-PPVkPhysicalDeviceExternalBufferInfoKHR = ^PVkPhysicalDeviceExternalBufferInfoKHR;
-VkPhysicalDeviceExternalBufferInfoKHR = record
-end;
-
-
 PVkExternalBufferProperties  =  ^VkExternalBufferProperties;
 PPVkExternalBufferProperties = ^PVkExternalBufferProperties;
 VkExternalBufferProperties = record
   sType: VkStructureType;
   pNext: Pointer;
   externalMemoryProperties: VkExternalMemoryProperties;
-end;
-
-
-PVkExternalBufferPropertiesKHR  =  ^VkExternalBufferPropertiesKHR;
-PPVkExternalBufferPropertiesKHR = ^PVkExternalBufferPropertiesKHR;
-VkExternalBufferPropertiesKHR = record
 end;
 
 
@@ -6818,24 +6696,12 @@ VkPhysicalDeviceIDProperties = record
 end;
 
 
-PVkPhysicalDeviceIDPropertiesKHR  =  ^VkPhysicalDeviceIDPropertiesKHR;
-PPVkPhysicalDeviceIDPropertiesKHR = ^PVkPhysicalDeviceIDPropertiesKHR;
-VkPhysicalDeviceIDPropertiesKHR = record
-end;
-
-
 PVkExternalMemoryImageCreateInfo  =  ^VkExternalMemoryImageCreateInfo;
 PPVkExternalMemoryImageCreateInfo = ^PVkExternalMemoryImageCreateInfo;
 VkExternalMemoryImageCreateInfo = record
   sType: VkStructureType;
   pNext: Pointer;
   handleTypes: VkExternalMemoryHandleTypeFlags;
-end;
-
-
-PVkExternalMemoryImageCreateInfoKHR  =  ^VkExternalMemoryImageCreateInfoKHR;
-PPVkExternalMemoryImageCreateInfoKHR = ^PVkExternalMemoryImageCreateInfoKHR;
-VkExternalMemoryImageCreateInfoKHR = record
 end;
 
 
@@ -6848,24 +6714,12 @@ VkExternalMemoryBufferCreateInfo = record
 end;
 
 
-PVkExternalMemoryBufferCreateInfoKHR  =  ^VkExternalMemoryBufferCreateInfoKHR;
-PPVkExternalMemoryBufferCreateInfoKHR = ^PVkExternalMemoryBufferCreateInfoKHR;
-VkExternalMemoryBufferCreateInfoKHR = record
-end;
-
-
 PVkExportMemoryAllocateInfo  =  ^VkExportMemoryAllocateInfo;
 PPVkExportMemoryAllocateInfo = ^PVkExportMemoryAllocateInfo;
 VkExportMemoryAllocateInfo = record
   sType: VkStructureType;
   pNext: Pointer;
   handleTypes: VkExternalMemoryHandleTypeFlags;
-end;
-
-
-PVkExportMemoryAllocateInfoKHR  =  ^VkExportMemoryAllocateInfoKHR;
-PPVkExportMemoryAllocateInfoKHR = ^PVkExportMemoryAllocateInfoKHR;
-VkExportMemoryAllocateInfoKHR = record
 end;
 
 
@@ -6963,12 +6817,6 @@ VkPhysicalDeviceExternalSemaphoreInfo = record
 end;
 
 
-PVkPhysicalDeviceExternalSemaphoreInfoKHR  =  ^VkPhysicalDeviceExternalSemaphoreInfoKHR;
-PPVkPhysicalDeviceExternalSemaphoreInfoKHR = ^PVkPhysicalDeviceExternalSemaphoreInfoKHR;
-VkPhysicalDeviceExternalSemaphoreInfoKHR = record
-end;
-
-
 PVkExternalSemaphoreProperties  =  ^VkExternalSemaphoreProperties;
 PPVkExternalSemaphoreProperties = ^PVkExternalSemaphoreProperties;
 VkExternalSemaphoreProperties = record
@@ -6980,24 +6828,12 @@ VkExternalSemaphoreProperties = record
 end;
 
 
-PVkExternalSemaphorePropertiesKHR  =  ^VkExternalSemaphorePropertiesKHR;
-PPVkExternalSemaphorePropertiesKHR = ^PVkExternalSemaphorePropertiesKHR;
-VkExternalSemaphorePropertiesKHR = record
-end;
-
-
 PVkExportSemaphoreCreateInfo  =  ^VkExportSemaphoreCreateInfo;
 PPVkExportSemaphoreCreateInfo = ^PVkExportSemaphoreCreateInfo;
 VkExportSemaphoreCreateInfo = record
   sType: VkStructureType;
   pNext: Pointer;
   handleTypes: VkExternalSemaphoreHandleTypeFlags;
-end;
-
-
-PVkExportSemaphoreCreateInfoKHR  =  ^VkExportSemaphoreCreateInfoKHR;
-PPVkExportSemaphoreCreateInfoKHR = ^PVkExportSemaphoreCreateInfoKHR;
-VkExportSemaphoreCreateInfoKHR = record
 end;
 
 
@@ -7078,12 +6914,6 @@ VkPhysicalDeviceExternalFenceInfo = record
 end;
 
 
-PVkPhysicalDeviceExternalFenceInfoKHR  =  ^VkPhysicalDeviceExternalFenceInfoKHR;
-PPVkPhysicalDeviceExternalFenceInfoKHR = ^PVkPhysicalDeviceExternalFenceInfoKHR;
-VkPhysicalDeviceExternalFenceInfoKHR = record
-end;
-
-
 PVkExternalFenceProperties  =  ^VkExternalFenceProperties;
 PPVkExternalFenceProperties = ^PVkExternalFenceProperties;
 VkExternalFenceProperties = record
@@ -7095,24 +6925,12 @@ VkExternalFenceProperties = record
 end;
 
 
-PVkExternalFencePropertiesKHR  =  ^VkExternalFencePropertiesKHR;
-PPVkExternalFencePropertiesKHR = ^PVkExternalFencePropertiesKHR;
-VkExternalFencePropertiesKHR = record
-end;
-
-
 PVkExportFenceCreateInfo  =  ^VkExportFenceCreateInfo;
 PPVkExportFenceCreateInfo = ^PVkExportFenceCreateInfo;
 VkExportFenceCreateInfo = record
   sType: VkStructureType;
   pNext: Pointer;
   handleTypes: VkExternalFenceHandleTypeFlags;
-end;
-
-
-PVkExportFenceCreateInfoKHR  =  ^VkExportFenceCreateInfoKHR;
-PPVkExportFenceCreateInfoKHR = ^PVkExportFenceCreateInfoKHR;
-VkExportFenceCreateInfoKHR = record
 end;
 
 
@@ -7183,12 +7001,6 @@ VkPhysicalDeviceMultiviewFeatures = record
 end;
 
 
-PVkPhysicalDeviceMultiviewFeaturesKHR  =  ^VkPhysicalDeviceMultiviewFeaturesKHR;
-PPVkPhysicalDeviceMultiviewFeaturesKHR = ^PVkPhysicalDeviceMultiviewFeaturesKHR;
-VkPhysicalDeviceMultiviewFeaturesKHR = record
-end;
-
-
 PVkPhysicalDeviceMultiviewProperties  =  ^VkPhysicalDeviceMultiviewProperties;
 PPVkPhysicalDeviceMultiviewProperties = ^PVkPhysicalDeviceMultiviewProperties;
 VkPhysicalDeviceMultiviewProperties = record
@@ -7196,12 +7008,6 @@ VkPhysicalDeviceMultiviewProperties = record
   pNext: Pointer;
   maxMultiviewViewCount: UInt32;
   maxMultiviewInstanceIndex: UInt32;
-end;
-
-
-PVkPhysicalDeviceMultiviewPropertiesKHR  =  ^VkPhysicalDeviceMultiviewPropertiesKHR;
-PPVkPhysicalDeviceMultiviewPropertiesKHR = ^PVkPhysicalDeviceMultiviewPropertiesKHR;
-VkPhysicalDeviceMultiviewPropertiesKHR = record
 end;
 
 
@@ -7216,12 +7022,6 @@ VkRenderPassMultiviewCreateInfo = record
   pViewOffsets: PInt32;
   correlationMaskCount: UInt32;
   pCorrelationMasks: PUInt32;
-end;
-
-
-PVkRenderPassMultiviewCreateInfoKHR  =  ^VkRenderPassMultiviewCreateInfoKHR;
-PPVkRenderPassMultiviewCreateInfoKHR = ^PVkRenderPassMultiviewCreateInfoKHR;
-VkRenderPassMultiviewCreateInfoKHR = record
 end;
 
 
@@ -7291,12 +7091,6 @@ VkPhysicalDeviceGroupProperties = record
 end;
 
 
-PVkPhysicalDeviceGroupPropertiesKHR  =  ^VkPhysicalDeviceGroupPropertiesKHR;
-PPVkPhysicalDeviceGroupPropertiesKHR = ^PVkPhysicalDeviceGroupPropertiesKHR;
-VkPhysicalDeviceGroupPropertiesKHR = record
-end;
-
-
 PVkMemoryAllocateFlagsInfo  =  ^VkMemoryAllocateFlagsInfo;
 PPVkMemoryAllocateFlagsInfo = ^PVkMemoryAllocateFlagsInfo;
 VkMemoryAllocateFlagsInfo = record
@@ -7304,12 +7098,6 @@ VkMemoryAllocateFlagsInfo = record
   pNext: Pointer;
   flags: VkMemoryAllocateFlags;
   deviceMask: UInt32;
-end;
-
-
-PVkMemoryAllocateFlagsInfoKHR  =  ^VkMemoryAllocateFlagsInfoKHR;
-PPVkMemoryAllocateFlagsInfoKHR = ^PVkMemoryAllocateFlagsInfoKHR;
-VkMemoryAllocateFlagsInfoKHR = record
 end;
 
 
@@ -7324,12 +7112,6 @@ VkBindBufferMemoryInfo = record
 end;
 
 
-PVkBindBufferMemoryInfoKHR  =  ^VkBindBufferMemoryInfoKHR;
-PPVkBindBufferMemoryInfoKHR = ^PVkBindBufferMemoryInfoKHR;
-VkBindBufferMemoryInfoKHR = record
-end;
-
-
 PVkBindBufferMemoryDeviceGroupInfo  =  ^VkBindBufferMemoryDeviceGroupInfo;
 PPVkBindBufferMemoryDeviceGroupInfo = ^PVkBindBufferMemoryDeviceGroupInfo;
 VkBindBufferMemoryDeviceGroupInfo = record
@@ -7337,12 +7119,6 @@ VkBindBufferMemoryDeviceGroupInfo = record
   pNext: Pointer;
   deviceIndexCount: UInt32;
   pDeviceIndices: PUInt32;
-end;
-
-
-PVkBindBufferMemoryDeviceGroupInfoKHR  =  ^VkBindBufferMemoryDeviceGroupInfoKHR;
-PPVkBindBufferMemoryDeviceGroupInfoKHR = ^PVkBindBufferMemoryDeviceGroupInfoKHR;
-VkBindBufferMemoryDeviceGroupInfoKHR = record
 end;
 
 
@@ -7354,12 +7130,6 @@ VkBindImageMemoryInfo = record
   image: VkImage;
   memory: VkDeviceMemory;
   memoryOffset: VkDeviceSize;
-end;
-
-
-PVkBindImageMemoryInfoKHR  =  ^VkBindImageMemoryInfoKHR;
-PPVkBindImageMemoryInfoKHR = ^PVkBindImageMemoryInfoKHR;
-VkBindImageMemoryInfoKHR = record
 end;
 
 
@@ -7375,12 +7145,6 @@ VkBindImageMemoryDeviceGroupInfo = record
 end;
 
 
-PVkBindImageMemoryDeviceGroupInfoKHR  =  ^VkBindImageMemoryDeviceGroupInfoKHR;
-PPVkBindImageMemoryDeviceGroupInfoKHR = ^PVkBindImageMemoryDeviceGroupInfoKHR;
-VkBindImageMemoryDeviceGroupInfoKHR = record
-end;
-
-
 PVkDeviceGroupRenderPassBeginInfo  =  ^VkDeviceGroupRenderPassBeginInfo;
 PPVkDeviceGroupRenderPassBeginInfo = ^PVkDeviceGroupRenderPassBeginInfo;
 VkDeviceGroupRenderPassBeginInfo = record
@@ -7392,24 +7156,12 @@ VkDeviceGroupRenderPassBeginInfo = record
 end;
 
 
-PVkDeviceGroupRenderPassBeginInfoKHR  =  ^VkDeviceGroupRenderPassBeginInfoKHR;
-PPVkDeviceGroupRenderPassBeginInfoKHR = ^PVkDeviceGroupRenderPassBeginInfoKHR;
-VkDeviceGroupRenderPassBeginInfoKHR = record
-end;
-
-
 PVkDeviceGroupCommandBufferBeginInfo  =  ^VkDeviceGroupCommandBufferBeginInfo;
 PPVkDeviceGroupCommandBufferBeginInfo = ^PVkDeviceGroupCommandBufferBeginInfo;
 VkDeviceGroupCommandBufferBeginInfo = record
   sType: VkStructureType;
   pNext: Pointer;
   deviceMask: UInt32;
-end;
-
-
-PVkDeviceGroupCommandBufferBeginInfoKHR  =  ^VkDeviceGroupCommandBufferBeginInfoKHR;
-PPVkDeviceGroupCommandBufferBeginInfoKHR = ^PVkDeviceGroupCommandBufferBeginInfoKHR;
-VkDeviceGroupCommandBufferBeginInfoKHR = record
 end;
 
 
@@ -7427,12 +7179,6 @@ VkDeviceGroupSubmitInfo = record
 end;
 
 
-PVkDeviceGroupSubmitInfoKHR  =  ^VkDeviceGroupSubmitInfoKHR;
-PPVkDeviceGroupSubmitInfoKHR = ^PVkDeviceGroupSubmitInfoKHR;
-VkDeviceGroupSubmitInfoKHR = record
-end;
-
-
 PVkDeviceGroupBindSparseInfo  =  ^VkDeviceGroupBindSparseInfo;
 PPVkDeviceGroupBindSparseInfo = ^PVkDeviceGroupBindSparseInfo;
 VkDeviceGroupBindSparseInfo = record
@@ -7440,12 +7186,6 @@ VkDeviceGroupBindSparseInfo = record
   pNext: Pointer;
   resourceDeviceIndex: UInt32;
   memoryDeviceIndex: UInt32;
-end;
-
-
-PVkDeviceGroupBindSparseInfoKHR  =  ^VkDeviceGroupBindSparseInfoKHR;
-PPVkDeviceGroupBindSparseInfoKHR = ^PVkDeviceGroupBindSparseInfoKHR;
-VkDeviceGroupBindSparseInfoKHR = record
 end;
 
 
@@ -7512,12 +7252,6 @@ VkDeviceGroupDeviceCreateInfo = record
 end;
 
 
-PVkDeviceGroupDeviceCreateInfoKHR  =  ^VkDeviceGroupDeviceCreateInfoKHR;
-PPVkDeviceGroupDeviceCreateInfoKHR = ^PVkDeviceGroupDeviceCreateInfoKHR;
-VkDeviceGroupDeviceCreateInfoKHR = record
-end;
-
-
 PVkDeviceGroupSwapchainCreateInfoKHR  =  ^VkDeviceGroupSwapchainCreateInfoKHR;
 PPVkDeviceGroupSwapchainCreateInfoKHR = ^PVkDeviceGroupSwapchainCreateInfoKHR;
 VkDeviceGroupSwapchainCreateInfoKHR = record
@@ -7539,12 +7273,6 @@ VkDescriptorUpdateTemplateEntry = record
 end;
 
 
-PVkDescriptorUpdateTemplateEntryKHR  =  ^VkDescriptorUpdateTemplateEntryKHR;
-PPVkDescriptorUpdateTemplateEntryKHR = ^PVkDescriptorUpdateTemplateEntryKHR;
-VkDescriptorUpdateTemplateEntryKHR = record
-end;
-
-
 PVkDescriptorUpdateTemplateCreateInfo  =  ^VkDescriptorUpdateTemplateCreateInfo;
 PPVkDescriptorUpdateTemplateCreateInfo = ^PVkDescriptorUpdateTemplateCreateInfo;
 VkDescriptorUpdateTemplateCreateInfo = record
@@ -7558,12 +7286,6 @@ VkDescriptorUpdateTemplateCreateInfo = record
   pipelineBindPoint: VkPipelineBindPoint;
   pipelineLayout: VkPipelineLayout;
   _set: UInt32;
-end;
-
-
-PVkDescriptorUpdateTemplateCreateInfoKHR  =  ^VkDescriptorUpdateTemplateCreateInfoKHR;
-PPVkDescriptorUpdateTemplateCreateInfoKHR = ^PVkDescriptorUpdateTemplateCreateInfoKHR;
-VkDescriptorUpdateTemplateCreateInfoKHR = record
 end;
 
 
@@ -7782,12 +7504,6 @@ VkInputAttachmentAspectReference = record
 end;
 
 
-PVkInputAttachmentAspectReferenceKHR  =  ^VkInputAttachmentAspectReferenceKHR;
-PPVkInputAttachmentAspectReferenceKHR = ^PVkInputAttachmentAspectReferenceKHR;
-VkInputAttachmentAspectReferenceKHR = record
-end;
-
-
 PVkRenderPassInputAttachmentAspectCreateInfo  =  ^VkRenderPassInputAttachmentAspectCreateInfo;
 PPVkRenderPassInputAttachmentAspectCreateInfo = ^PVkRenderPassInputAttachmentAspectCreateInfo;
 VkRenderPassInputAttachmentAspectCreateInfo = record
@@ -7795,12 +7511,6 @@ VkRenderPassInputAttachmentAspectCreateInfo = record
   pNext: Pointer;
   aspectReferenceCount: UInt32;
   pAspectReferences: PVkInputAttachmentAspectReference;
-end;
-
-
-PVkRenderPassInputAttachmentAspectCreateInfoKHR  =  ^VkRenderPassInputAttachmentAspectCreateInfoKHR;
-PPVkRenderPassInputAttachmentAspectCreateInfoKHR = ^PVkRenderPassInputAttachmentAspectCreateInfoKHR;
-VkRenderPassInputAttachmentAspectCreateInfoKHR = record
 end;
 
 
@@ -7898,12 +7608,6 @@ VkPhysicalDevice16BitStorageFeatures = record
 end;
 
 
-PVkPhysicalDevice16BitStorageFeaturesKHR  =  ^VkPhysicalDevice16BitStorageFeaturesKHR;
-PPVkPhysicalDevice16BitStorageFeaturesKHR = ^PVkPhysicalDevice16BitStorageFeaturesKHR;
-VkPhysicalDevice16BitStorageFeaturesKHR = record
-end;
-
-
 PVkPhysicalDeviceSubgroupProperties  =  ^VkPhysicalDeviceSubgroupProperties;
 PPVkPhysicalDeviceSubgroupProperties = ^PVkPhysicalDeviceSubgroupProperties;
 VkPhysicalDeviceSubgroupProperties = record
@@ -7925,24 +7629,12 @@ VkPhysicalDeviceShaderSubgroupExtendedTypesFeatures = record
 end;
 
 
-PVkPhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR  =  ^VkPhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR;
-PPVkPhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR = ^PVkPhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR;
-VkPhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR = record
-end;
-
-
 PVkBufferMemoryRequirementsInfo2  =  ^VkBufferMemoryRequirementsInfo2;
 PPVkBufferMemoryRequirementsInfo2 = ^PVkBufferMemoryRequirementsInfo2;
 VkBufferMemoryRequirementsInfo2 = record
   sType: VkStructureType;
   pNext: Pointer;
   buffer: VkBuffer;
-end;
-
-
-PVkBufferMemoryRequirementsInfo2KHR  =  ^VkBufferMemoryRequirementsInfo2KHR;
-PPVkBufferMemoryRequirementsInfo2KHR = ^PVkBufferMemoryRequirementsInfo2KHR;
-VkBufferMemoryRequirementsInfo2KHR = record
 end;
 
 
@@ -7955,24 +7647,12 @@ VkImageMemoryRequirementsInfo2 = record
 end;
 
 
-PVkImageMemoryRequirementsInfo2KHR  =  ^VkImageMemoryRequirementsInfo2KHR;
-PPVkImageMemoryRequirementsInfo2KHR = ^PVkImageMemoryRequirementsInfo2KHR;
-VkImageMemoryRequirementsInfo2KHR = record
-end;
-
-
 PVkImageSparseMemoryRequirementsInfo2  =  ^VkImageSparseMemoryRequirementsInfo2;
 PPVkImageSparseMemoryRequirementsInfo2 = ^PVkImageSparseMemoryRequirementsInfo2;
 VkImageSparseMemoryRequirementsInfo2 = record
   sType: VkStructureType;
   pNext: Pointer;
   image: VkImage;
-end;
-
-
-PVkImageSparseMemoryRequirementsInfo2KHR  =  ^VkImageSparseMemoryRequirementsInfo2KHR;
-PPVkImageSparseMemoryRequirementsInfo2KHR = ^PVkImageSparseMemoryRequirementsInfo2KHR;
-VkImageSparseMemoryRequirementsInfo2KHR = record
 end;
 
 
@@ -7985,12 +7665,6 @@ VkMemoryRequirements2 = record
 end;
 
 
-PVkMemoryRequirements2KHR  =  ^VkMemoryRequirements2KHR;
-PPVkMemoryRequirements2KHR = ^PVkMemoryRequirements2KHR;
-VkMemoryRequirements2KHR = record
-end;
-
-
 PVkSparseImageMemoryRequirements2  =  ^VkSparseImageMemoryRequirements2;
 PPVkSparseImageMemoryRequirements2 = ^PVkSparseImageMemoryRequirements2;
 VkSparseImageMemoryRequirements2 = record
@@ -8000,24 +7674,12 @@ VkSparseImageMemoryRequirements2 = record
 end;
 
 
-PVkSparseImageMemoryRequirements2KHR  =  ^VkSparseImageMemoryRequirements2KHR;
-PPVkSparseImageMemoryRequirements2KHR = ^PVkSparseImageMemoryRequirements2KHR;
-VkSparseImageMemoryRequirements2KHR = record
-end;
-
-
 PVkPhysicalDevicePointClippingProperties  =  ^VkPhysicalDevicePointClippingProperties;
 PPVkPhysicalDevicePointClippingProperties = ^PVkPhysicalDevicePointClippingProperties;
 VkPhysicalDevicePointClippingProperties = record
   sType: VkStructureType;
   pNext: Pointer;
   pointClippingBehavior: VkPointClippingBehavior;
-end;
-
-
-PVkPhysicalDevicePointClippingPropertiesKHR  =  ^VkPhysicalDevicePointClippingPropertiesKHR;
-PPVkPhysicalDevicePointClippingPropertiesKHR = ^PVkPhysicalDevicePointClippingPropertiesKHR;
-VkPhysicalDevicePointClippingPropertiesKHR = record
 end;
 
 
@@ -8031,12 +7693,6 @@ VkMemoryDedicatedRequirements = record
 end;
 
 
-PVkMemoryDedicatedRequirementsKHR  =  ^VkMemoryDedicatedRequirementsKHR;
-PPVkMemoryDedicatedRequirementsKHR = ^PVkMemoryDedicatedRequirementsKHR;
-VkMemoryDedicatedRequirementsKHR = record
-end;
-
-
 PVkMemoryDedicatedAllocateInfo  =  ^VkMemoryDedicatedAllocateInfo;
 PPVkMemoryDedicatedAllocateInfo = ^PVkMemoryDedicatedAllocateInfo;
 VkMemoryDedicatedAllocateInfo = record
@@ -8044,12 +7700,6 @@ VkMemoryDedicatedAllocateInfo = record
   pNext: Pointer;
   image: VkImage;
   buffer: VkBuffer;
-end;
-
-
-PVkMemoryDedicatedAllocateInfoKHR  =  ^VkMemoryDedicatedAllocateInfoKHR;
-PPVkMemoryDedicatedAllocateInfoKHR = ^PVkMemoryDedicatedAllocateInfoKHR;
-VkMemoryDedicatedAllocateInfoKHR = record
 end;
 
 
@@ -8062,12 +7712,6 @@ VkImageViewUsageCreateInfo = record
 end;
 
 
-PVkImageViewUsageCreateInfoKHR  =  ^VkImageViewUsageCreateInfoKHR;
-PPVkImageViewUsageCreateInfoKHR = ^PVkImageViewUsageCreateInfoKHR;
-VkImageViewUsageCreateInfoKHR = record
-end;
-
-
 PVkPipelineTessellationDomainOriginStateCreateInfo  =  ^VkPipelineTessellationDomainOriginStateCreateInfo;
 PPVkPipelineTessellationDomainOriginStateCreateInfo = ^PVkPipelineTessellationDomainOriginStateCreateInfo;
 VkPipelineTessellationDomainOriginStateCreateInfo = record
@@ -8077,24 +7721,12 @@ VkPipelineTessellationDomainOriginStateCreateInfo = record
 end;
 
 
-PVkPipelineTessellationDomainOriginStateCreateInfoKHR  =  ^VkPipelineTessellationDomainOriginStateCreateInfoKHR;
-PPVkPipelineTessellationDomainOriginStateCreateInfoKHR = ^PVkPipelineTessellationDomainOriginStateCreateInfoKHR;
-VkPipelineTessellationDomainOriginStateCreateInfoKHR = record
-end;
-
-
 PVkSamplerYcbcrConversionInfo  =  ^VkSamplerYcbcrConversionInfo;
 PPVkSamplerYcbcrConversionInfo = ^PVkSamplerYcbcrConversionInfo;
 VkSamplerYcbcrConversionInfo = record
   sType: VkStructureType;
   pNext: Pointer;
   conversion: VkSamplerYcbcrConversion;
-end;
-
-
-PVkSamplerYcbcrConversionInfoKHR  =  ^VkSamplerYcbcrConversionInfoKHR;
-PPVkSamplerYcbcrConversionInfoKHR = ^PVkSamplerYcbcrConversionInfoKHR;
-VkSamplerYcbcrConversionInfoKHR = record
 end;
 
 
@@ -8114,24 +7746,12 @@ VkSamplerYcbcrConversionCreateInfo = record
 end;
 
 
-PVkSamplerYcbcrConversionCreateInfoKHR  =  ^VkSamplerYcbcrConversionCreateInfoKHR;
-PPVkSamplerYcbcrConversionCreateInfoKHR = ^PVkSamplerYcbcrConversionCreateInfoKHR;
-VkSamplerYcbcrConversionCreateInfoKHR = record
-end;
-
-
 PVkBindImagePlaneMemoryInfo  =  ^VkBindImagePlaneMemoryInfo;
 PPVkBindImagePlaneMemoryInfo = ^PVkBindImagePlaneMemoryInfo;
 VkBindImagePlaneMemoryInfo = record
   sType: VkStructureType;
   pNext: Pointer;
   planeAspect: VkImageAspectFlagBits;
-end;
-
-
-PVkBindImagePlaneMemoryInfoKHR  =  ^VkBindImagePlaneMemoryInfoKHR;
-PPVkBindImagePlaneMemoryInfoKHR = ^PVkBindImagePlaneMemoryInfoKHR;
-VkBindImagePlaneMemoryInfoKHR = record
 end;
 
 
@@ -8144,12 +7764,6 @@ VkImagePlaneMemoryRequirementsInfo = record
 end;
 
 
-PVkImagePlaneMemoryRequirementsInfoKHR  =  ^VkImagePlaneMemoryRequirementsInfoKHR;
-PPVkImagePlaneMemoryRequirementsInfoKHR = ^PVkImagePlaneMemoryRequirementsInfoKHR;
-VkImagePlaneMemoryRequirementsInfoKHR = record
-end;
-
-
 PVkPhysicalDeviceSamplerYcbcrConversionFeatures  =  ^VkPhysicalDeviceSamplerYcbcrConversionFeatures;
 PPVkPhysicalDeviceSamplerYcbcrConversionFeatures = ^PVkPhysicalDeviceSamplerYcbcrConversionFeatures;
 VkPhysicalDeviceSamplerYcbcrConversionFeatures = record
@@ -8159,24 +7773,12 @@ VkPhysicalDeviceSamplerYcbcrConversionFeatures = record
 end;
 
 
-PVkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR  =  ^VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR;
-PPVkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR = ^PVkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR;
-VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR = record
-end;
-
-
 PVkSamplerYcbcrConversionImageFormatProperties  =  ^VkSamplerYcbcrConversionImageFormatProperties;
 PPVkSamplerYcbcrConversionImageFormatProperties = ^PVkSamplerYcbcrConversionImageFormatProperties;
 VkSamplerYcbcrConversionImageFormatProperties = record
   sType: VkStructureType;
   pNext: Pointer;
   combinedImageSamplerDescriptorCount: UInt32;
-end;
-
-
-PVkSamplerYcbcrConversionImageFormatPropertiesKHR  =  ^VkSamplerYcbcrConversionImageFormatPropertiesKHR;
-PPVkSamplerYcbcrConversionImageFormatPropertiesKHR = ^PVkSamplerYcbcrConversionImageFormatPropertiesKHR;
-VkSamplerYcbcrConversionImageFormatPropertiesKHR = record
 end;
 
 
@@ -8256,12 +7858,6 @@ VkPhysicalDeviceSamplerFilterMinmaxProperties = record
   pNext: Pointer;
   filterMinmaxSingleComponentFormats: VkBool32;
   filterMinmaxImageComponentMapping: VkBool32;
-end;
-
-
-PVkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT  =  ^VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT;
-PPVkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT = ^PVkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT;
-VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT = record
 end;
 
 
@@ -8351,12 +7947,6 @@ VkSamplerReductionModeCreateInfo = record
   sType: VkStructureType;
   pNext: Pointer;
   reductionMode: VkSamplerReductionMode;
-end;
-
-
-PVkSamplerReductionModeCreateInfoEXT  =  ^VkSamplerReductionModeCreateInfoEXT;
-PPVkSamplerReductionModeCreateInfoEXT = ^PVkSamplerReductionModeCreateInfoEXT;
-VkSamplerReductionModeCreateInfoEXT = record
 end;
 
 
@@ -8468,12 +8058,6 @@ VkImageFormatListCreateInfo = record
 end;
 
 
-PVkImageFormatListCreateInfoKHR  =  ^VkImageFormatListCreateInfoKHR;
-PPVkImageFormatListCreateInfoKHR = ^PVkImageFormatListCreateInfoKHR;
-VkImageFormatListCreateInfoKHR = record
-end;
-
-
 PVkValidationCacheCreateInfoEXT  =  ^VkValidationCacheCreateInfoEXT;
 PPVkValidationCacheCreateInfoEXT = ^PVkValidationCacheCreateInfoEXT;
 VkValidationCacheCreateInfoEXT = record
@@ -8504,24 +8088,12 @@ VkPhysicalDeviceMaintenance3Properties = record
 end;
 
 
-PVkPhysicalDeviceMaintenance3PropertiesKHR  =  ^VkPhysicalDeviceMaintenance3PropertiesKHR;
-PPVkPhysicalDeviceMaintenance3PropertiesKHR = ^PVkPhysicalDeviceMaintenance3PropertiesKHR;
-VkPhysicalDeviceMaintenance3PropertiesKHR = record
-end;
-
-
 PVkDescriptorSetLayoutSupport  =  ^VkDescriptorSetLayoutSupport;
 PPVkDescriptorSetLayoutSupport = ^PVkDescriptorSetLayoutSupport;
 VkDescriptorSetLayoutSupport = record
   sType: VkStructureType;
   pNext: Pointer;
   supported: VkBool32;
-end;
-
-
-PVkDescriptorSetLayoutSupportKHR  =  ^VkDescriptorSetLayoutSupportKHR;
-PPVkDescriptorSetLayoutSupportKHR = ^PVkDescriptorSetLayoutSupportKHR;
-VkDescriptorSetLayoutSupportKHR = record
 end;
 
 
@@ -8534,12 +8106,6 @@ VkPhysicalDeviceShaderDrawParametersFeatures = record
 end;
 
 
-PVkPhysicalDeviceShaderDrawParameterFeatures  =  ^VkPhysicalDeviceShaderDrawParameterFeatures;
-PPVkPhysicalDeviceShaderDrawParameterFeatures = ^PVkPhysicalDeviceShaderDrawParameterFeatures;
-VkPhysicalDeviceShaderDrawParameterFeatures = record
-end;
-
-
 PVkPhysicalDeviceShaderFloat16Int8Features  =  ^VkPhysicalDeviceShaderFloat16Int8Features;
 PPVkPhysicalDeviceShaderFloat16Int8Features = ^PVkPhysicalDeviceShaderFloat16Int8Features;
 VkPhysicalDeviceShaderFloat16Int8Features = record
@@ -8547,18 +8113,6 @@ VkPhysicalDeviceShaderFloat16Int8Features = record
   pNext: Pointer;
   shaderFloat16: VkBool32;
   shaderInt8: VkBool32;
-end;
-
-
-PVkPhysicalDeviceShaderFloat16Int8FeaturesKHR  =  ^VkPhysicalDeviceShaderFloat16Int8FeaturesKHR;
-PPVkPhysicalDeviceShaderFloat16Int8FeaturesKHR = ^PVkPhysicalDeviceShaderFloat16Int8FeaturesKHR;
-VkPhysicalDeviceShaderFloat16Int8FeaturesKHR = record
-end;
-
-
-PVkPhysicalDeviceFloat16Int8FeaturesKHR  =  ^VkPhysicalDeviceFloat16Int8FeaturesKHR;
-PPVkPhysicalDeviceFloat16Int8FeaturesKHR = ^PVkPhysicalDeviceFloat16Int8FeaturesKHR;
-VkPhysicalDeviceFloat16Int8FeaturesKHR = record
 end;
 
 
@@ -8587,24 +8141,12 @@ VkPhysicalDeviceFloatControlsProperties = record
 end;
 
 
-PVkPhysicalDeviceFloatControlsPropertiesKHR  =  ^VkPhysicalDeviceFloatControlsPropertiesKHR;
-PPVkPhysicalDeviceFloatControlsPropertiesKHR = ^PVkPhysicalDeviceFloatControlsPropertiesKHR;
-VkPhysicalDeviceFloatControlsPropertiesKHR = record
-end;
-
-
 PVkPhysicalDeviceHostQueryResetFeatures  =  ^VkPhysicalDeviceHostQueryResetFeatures;
 PPVkPhysicalDeviceHostQueryResetFeatures = ^PVkPhysicalDeviceHostQueryResetFeatures;
 VkPhysicalDeviceHostQueryResetFeatures = record
   sType: VkStructureType;
   pNext: Pointer;
   hostQueryReset: VkBool32;
-end;
-
-
-PVkPhysicalDeviceHostQueryResetFeaturesEXT  =  ^VkPhysicalDeviceHostQueryResetFeaturesEXT;
-PPVkPhysicalDeviceHostQueryResetFeaturesEXT = ^PVkPhysicalDeviceHostQueryResetFeaturesEXT;
-VkPhysicalDeviceHostQueryResetFeaturesEXT = record
 end;
 
 
@@ -8922,12 +8464,6 @@ VkPhysicalDeviceDescriptorIndexingFeatures = record
 end;
 
 
-PVkPhysicalDeviceDescriptorIndexingFeaturesEXT  =  ^VkPhysicalDeviceDescriptorIndexingFeaturesEXT;
-PPVkPhysicalDeviceDescriptorIndexingFeaturesEXT = ^PVkPhysicalDeviceDescriptorIndexingFeaturesEXT;
-VkPhysicalDeviceDescriptorIndexingFeaturesEXT = record
-end;
-
-
 PVkPhysicalDeviceDescriptorIndexingProperties  =  ^VkPhysicalDeviceDescriptorIndexingProperties;
 PPVkPhysicalDeviceDescriptorIndexingProperties = ^PVkPhysicalDeviceDescriptorIndexingProperties;
 VkPhysicalDeviceDescriptorIndexingProperties = record
@@ -8959,12 +8495,6 @@ VkPhysicalDeviceDescriptorIndexingProperties = record
 end;
 
 
-PVkPhysicalDeviceDescriptorIndexingPropertiesEXT  =  ^VkPhysicalDeviceDescriptorIndexingPropertiesEXT;
-PPVkPhysicalDeviceDescriptorIndexingPropertiesEXT = ^PVkPhysicalDeviceDescriptorIndexingPropertiesEXT;
-VkPhysicalDeviceDescriptorIndexingPropertiesEXT = record
-end;
-
-
 PVkDescriptorSetLayoutBindingFlagsCreateInfo  =  ^VkDescriptorSetLayoutBindingFlagsCreateInfo;
 PPVkDescriptorSetLayoutBindingFlagsCreateInfo = ^PVkDescriptorSetLayoutBindingFlagsCreateInfo;
 VkDescriptorSetLayoutBindingFlagsCreateInfo = record
@@ -8972,12 +8502,6 @@ VkDescriptorSetLayoutBindingFlagsCreateInfo = record
   pNext: Pointer;
   bindingCount: UInt32;
   pBindingFlags: PVkDescriptorBindingFlags;
-end;
-
-
-PVkDescriptorSetLayoutBindingFlagsCreateInfoEXT  =  ^VkDescriptorSetLayoutBindingFlagsCreateInfoEXT;
-PPVkDescriptorSetLayoutBindingFlagsCreateInfoEXT = ^PVkDescriptorSetLayoutBindingFlagsCreateInfoEXT;
-VkDescriptorSetLayoutBindingFlagsCreateInfoEXT = record
 end;
 
 
@@ -8991,24 +8515,12 @@ VkDescriptorSetVariableDescriptorCountAllocateInfo = record
 end;
 
 
-PVkDescriptorSetVariableDescriptorCountAllocateInfoEXT  =  ^VkDescriptorSetVariableDescriptorCountAllocateInfoEXT;
-PPVkDescriptorSetVariableDescriptorCountAllocateInfoEXT = ^PVkDescriptorSetVariableDescriptorCountAllocateInfoEXT;
-VkDescriptorSetVariableDescriptorCountAllocateInfoEXT = record
-end;
-
-
 PVkDescriptorSetVariableDescriptorCountLayoutSupport  =  ^VkDescriptorSetVariableDescriptorCountLayoutSupport;
 PPVkDescriptorSetVariableDescriptorCountLayoutSupport = ^PVkDescriptorSetVariableDescriptorCountLayoutSupport;
 VkDescriptorSetVariableDescriptorCountLayoutSupport = record
   sType: VkStructureType;
   pNext: Pointer;
   maxVariableDescriptorCount: UInt32;
-end;
-
-
-PVkDescriptorSetVariableDescriptorCountLayoutSupportEXT  =  ^VkDescriptorSetVariableDescriptorCountLayoutSupportEXT;
-PPVkDescriptorSetVariableDescriptorCountLayoutSupportEXT = ^PVkDescriptorSetVariableDescriptorCountLayoutSupportEXT;
-VkDescriptorSetVariableDescriptorCountLayoutSupportEXT = record
 end;
 
 
@@ -9029,12 +8541,6 @@ VkAttachmentDescription2 = record
 end;
 
 
-PVkAttachmentDescription2KHR  =  ^VkAttachmentDescription2KHR;
-PPVkAttachmentDescription2KHR = ^PVkAttachmentDescription2KHR;
-VkAttachmentDescription2KHR = record
-end;
-
-
 PVkAttachmentReference2  =  ^VkAttachmentReference2;
 PPVkAttachmentReference2 = ^PVkAttachmentReference2;
 VkAttachmentReference2 = record
@@ -9043,12 +8549,6 @@ VkAttachmentReference2 = record
   attachment: UInt32;
   layout: VkImageLayout;
   aspectMask: VkImageAspectFlags;
-end;
-
-
-PVkAttachmentReference2KHR  =  ^VkAttachmentReference2KHR;
-PPVkAttachmentReference2KHR = ^PVkAttachmentReference2KHR;
-VkAttachmentReference2KHR = record
 end;
 
 
@@ -9071,12 +8571,6 @@ VkSubpassDescription2 = record
 end;
 
 
-PVkSubpassDescription2KHR  =  ^VkSubpassDescription2KHR;
-PPVkSubpassDescription2KHR = ^PVkSubpassDescription2KHR;
-VkSubpassDescription2KHR = record
-end;
-
-
 PVkSubpassDependency2  =  ^VkSubpassDependency2;
 PPVkSubpassDependency2 = ^PVkSubpassDependency2;
 VkSubpassDependency2 = record
@@ -9090,12 +8584,6 @@ VkSubpassDependency2 = record
   dstAccessMask: VkAccessFlags;
   dependencyFlags: VkDependencyFlags;
   viewOffset: Int32;
-end;
-
-
-PVkSubpassDependency2KHR  =  ^VkSubpassDependency2KHR;
-PPVkSubpassDependency2KHR = ^PVkSubpassDependency2KHR;
-VkSubpassDependency2KHR = record
 end;
 
 
@@ -9116,12 +8604,6 @@ VkRenderPassCreateInfo2 = record
 end;
 
 
-PVkRenderPassCreateInfo2KHR  =  ^VkRenderPassCreateInfo2KHR;
-PPVkRenderPassCreateInfo2KHR = ^PVkRenderPassCreateInfo2KHR;
-VkRenderPassCreateInfo2KHR = record
-end;
-
-
 PVkSubpassBeginInfo  =  ^VkSubpassBeginInfo;
 PPVkSubpassBeginInfo = ^PVkSubpassBeginInfo;
 VkSubpassBeginInfo = record
@@ -9131,23 +8613,11 @@ VkSubpassBeginInfo = record
 end;
 
 
-PVkSubpassBeginInfoKHR  =  ^VkSubpassBeginInfoKHR;
-PPVkSubpassBeginInfoKHR = ^PVkSubpassBeginInfoKHR;
-VkSubpassBeginInfoKHR = record
-end;
-
-
 PVkSubpassEndInfo  =  ^VkSubpassEndInfo;
 PPVkSubpassEndInfo = ^PVkSubpassEndInfo;
 VkSubpassEndInfo = record
   sType: VkStructureType;
   pNext: Pointer;
-end;
-
-
-PVkSubpassEndInfoKHR  =  ^VkSubpassEndInfoKHR;
-PPVkSubpassEndInfoKHR = ^PVkSubpassEndInfoKHR;
-VkSubpassEndInfoKHR = record
 end;
 
 
@@ -9160,24 +8630,12 @@ VkPhysicalDeviceTimelineSemaphoreFeatures = record
 end;
 
 
-PVkPhysicalDeviceTimelineSemaphoreFeaturesKHR  =  ^VkPhysicalDeviceTimelineSemaphoreFeaturesKHR;
-PPVkPhysicalDeviceTimelineSemaphoreFeaturesKHR = ^PVkPhysicalDeviceTimelineSemaphoreFeaturesKHR;
-VkPhysicalDeviceTimelineSemaphoreFeaturesKHR = record
-end;
-
-
 PVkPhysicalDeviceTimelineSemaphoreProperties  =  ^VkPhysicalDeviceTimelineSemaphoreProperties;
 PPVkPhysicalDeviceTimelineSemaphoreProperties = ^PVkPhysicalDeviceTimelineSemaphoreProperties;
 VkPhysicalDeviceTimelineSemaphoreProperties = record
   sType: VkStructureType;
   pNext: Pointer;
   maxTimelineSemaphoreValueDifference: UInt64;
-end;
-
-
-PVkPhysicalDeviceTimelineSemaphorePropertiesKHR  =  ^VkPhysicalDeviceTimelineSemaphorePropertiesKHR;
-PPVkPhysicalDeviceTimelineSemaphorePropertiesKHR = ^PVkPhysicalDeviceTimelineSemaphorePropertiesKHR;
-VkPhysicalDeviceTimelineSemaphorePropertiesKHR = record
 end;
 
 
@@ -9188,12 +8646,6 @@ VkSemaphoreTypeCreateInfo = record
   pNext: Pointer;
   semaphoreType: VkSemaphoreType;
   initialValue: UInt64;
-end;
-
-
-PVkSemaphoreTypeCreateInfoKHR  =  ^VkSemaphoreTypeCreateInfoKHR;
-PPVkSemaphoreTypeCreateInfoKHR = ^PVkSemaphoreTypeCreateInfoKHR;
-VkSemaphoreTypeCreateInfoKHR = record
 end;
 
 
@@ -9209,12 +8661,6 @@ VkTimelineSemaphoreSubmitInfo = record
 end;
 
 
-PVkTimelineSemaphoreSubmitInfoKHR  =  ^VkTimelineSemaphoreSubmitInfoKHR;
-PPVkTimelineSemaphoreSubmitInfoKHR = ^PVkTimelineSemaphoreSubmitInfoKHR;
-VkTimelineSemaphoreSubmitInfoKHR = record
-end;
-
-
 PVkSemaphoreWaitInfo  =  ^VkSemaphoreWaitInfo;
 PPVkSemaphoreWaitInfo = ^PVkSemaphoreWaitInfo;
 VkSemaphoreWaitInfo = record
@@ -9227,12 +8673,6 @@ VkSemaphoreWaitInfo = record
 end;
 
 
-PVkSemaphoreWaitInfoKHR  =  ^VkSemaphoreWaitInfoKHR;
-PPVkSemaphoreWaitInfoKHR = ^PVkSemaphoreWaitInfoKHR;
-VkSemaphoreWaitInfoKHR = record
-end;
-
-
 PVkSemaphoreSignalInfo  =  ^VkSemaphoreSignalInfo;
 PPVkSemaphoreSignalInfo = ^PVkSemaphoreSignalInfo;
 VkSemaphoreSignalInfo = record
@@ -9240,12 +8680,6 @@ VkSemaphoreSignalInfo = record
   pNext: Pointer;
   semaphore: VkSemaphore;
   value: UInt64;
-end;
-
-
-PVkSemaphoreSignalInfoKHR  =  ^VkSemaphoreSignalInfoKHR;
-PPVkSemaphoreSignalInfoKHR = ^PVkSemaphoreSignalInfoKHR;
-VkSemaphoreSignalInfoKHR = record
 end;
 
 
@@ -9370,12 +8804,6 @@ VkPhysicalDevice8BitStorageFeatures = record
 end;
 
 
-PVkPhysicalDevice8BitStorageFeaturesKHR  =  ^VkPhysicalDevice8BitStorageFeaturesKHR;
-PPVkPhysicalDevice8BitStorageFeaturesKHR = ^PVkPhysicalDevice8BitStorageFeaturesKHR;
-VkPhysicalDevice8BitStorageFeaturesKHR = record
-end;
-
-
 PVkPhysicalDeviceConditionalRenderingFeaturesEXT  =  ^VkPhysicalDeviceConditionalRenderingFeaturesEXT;
 PPVkPhysicalDeviceConditionalRenderingFeaturesEXT = ^PVkPhysicalDeviceConditionalRenderingFeaturesEXT;
 VkPhysicalDeviceConditionalRenderingFeaturesEXT = record
@@ -9397,12 +8825,6 @@ VkPhysicalDeviceVulkanMemoryModelFeatures = record
 end;
 
 
-PVkPhysicalDeviceVulkanMemoryModelFeaturesKHR  =  ^VkPhysicalDeviceVulkanMemoryModelFeaturesKHR;
-PPVkPhysicalDeviceVulkanMemoryModelFeaturesKHR = ^PVkPhysicalDeviceVulkanMemoryModelFeaturesKHR;
-VkPhysicalDeviceVulkanMemoryModelFeaturesKHR = record
-end;
-
-
 PVkPhysicalDeviceShaderAtomicInt64Features  =  ^VkPhysicalDeviceShaderAtomicInt64Features;
 PPVkPhysicalDeviceShaderAtomicInt64Features = ^PVkPhysicalDeviceShaderAtomicInt64Features;
 VkPhysicalDeviceShaderAtomicInt64Features = record
@@ -9410,12 +8832,6 @@ VkPhysicalDeviceShaderAtomicInt64Features = record
   pNext: Pointer;
   shaderBufferInt64Atomics: VkBool32;
   shaderSharedInt64Atomics: VkBool32;
-end;
-
-
-PVkPhysicalDeviceShaderAtomicInt64FeaturesKHR  =  ^VkPhysicalDeviceShaderAtomicInt64FeaturesKHR;
-PPVkPhysicalDeviceShaderAtomicInt64FeaturesKHR = ^PVkPhysicalDeviceShaderAtomicInt64FeaturesKHR;
-VkPhysicalDeviceShaderAtomicInt64FeaturesKHR = record
 end;
 
 
@@ -9500,12 +8916,6 @@ VkPhysicalDeviceDepthStencilResolveProperties = record
 end;
 
 
-PVkPhysicalDeviceDepthStencilResolvePropertiesKHR  =  ^VkPhysicalDeviceDepthStencilResolvePropertiesKHR;
-PPVkPhysicalDeviceDepthStencilResolvePropertiesKHR = ^PVkPhysicalDeviceDepthStencilResolvePropertiesKHR;
-VkPhysicalDeviceDepthStencilResolvePropertiesKHR = record
-end;
-
-
 PVkSubpassDescriptionDepthStencilResolve  =  ^VkSubpassDescriptionDepthStencilResolve;
 PPVkSubpassDescriptionDepthStencilResolve = ^PVkSubpassDescriptionDepthStencilResolve;
 VkSubpassDescriptionDepthStencilResolve = record
@@ -9514,12 +8924,6 @@ VkSubpassDescriptionDepthStencilResolve = record
   depthResolveMode: VkResolveModeFlagBits;
   stencilResolveMode: VkResolveModeFlagBits;
   pDepthStencilResolveAttachment: PVkAttachmentReference2;
-end;
-
-
-PVkSubpassDescriptionDepthStencilResolveKHR  =  ^VkSubpassDescriptionDepthStencilResolveKHR;
-PPVkSubpassDescriptionDepthStencilResolveKHR = ^PVkSubpassDescriptionDepthStencilResolveKHR;
-VkSubpassDescriptionDepthStencilResolveKHR = record
 end;
 
 
@@ -10133,12 +9537,6 @@ VkImageStencilUsageCreateInfo = record
 end;
 
 
-PVkImageStencilUsageCreateInfoEXT  =  ^VkImageStencilUsageCreateInfoEXT;
-PPVkImageStencilUsageCreateInfoEXT = ^PVkImageStencilUsageCreateInfoEXT;
-VkImageStencilUsageCreateInfoEXT = record
-end;
-
-
 PVkDeviceMemoryOverallocationCreateInfoAMD  =  ^VkDeviceMemoryOverallocationCreateInfoAMD;
 PPVkDeviceMemoryOverallocationCreateInfoAMD = ^PVkDeviceMemoryOverallocationCreateInfoAMD;
 VkDeviceMemoryOverallocationCreateInfoAMD = record
@@ -10209,12 +9607,6 @@ VkPhysicalDeviceScalarBlockLayoutFeatures = record
 end;
 
 
-PVkPhysicalDeviceScalarBlockLayoutFeaturesEXT  =  ^VkPhysicalDeviceScalarBlockLayoutFeaturesEXT;
-PPVkPhysicalDeviceScalarBlockLayoutFeaturesEXT = ^PVkPhysicalDeviceScalarBlockLayoutFeaturesEXT;
-VkPhysicalDeviceScalarBlockLayoutFeaturesEXT = record
-end;
-
-
 PVkSurfaceProtectedCapabilitiesKHR  =  ^VkSurfaceProtectedCapabilitiesKHR;
 PPVkSurfaceProtectedCapabilitiesKHR = ^PVkSurfaceProtectedCapabilitiesKHR;
 VkSurfaceProtectedCapabilitiesKHR = record
@@ -10230,12 +9622,6 @@ VkPhysicalDeviceUniformBufferStandardLayoutFeatures = record
   sType: VkStructureType;
   pNext: Pointer;
   uniformBufferStandardLayout: VkBool32;
-end;
-
-
-PVkPhysicalDeviceUniformBufferStandardLayoutFeaturesKHR  =  ^VkPhysicalDeviceUniformBufferStandardLayoutFeaturesKHR;
-PPVkPhysicalDeviceUniformBufferStandardLayoutFeaturesKHR = ^PVkPhysicalDeviceUniformBufferStandardLayoutFeaturesKHR;
-VkPhysicalDeviceUniformBufferStandardLayoutFeaturesKHR = record
 end;
 
 
@@ -10297,12 +9683,6 @@ VkPhysicalDeviceBufferDeviceAddressFeatures = record
 end;
 
 
-PVkPhysicalDeviceBufferDeviceAddressFeaturesKHR  =  ^VkPhysicalDeviceBufferDeviceAddressFeaturesKHR;
-PPVkPhysicalDeviceBufferDeviceAddressFeaturesKHR = ^PVkPhysicalDeviceBufferDeviceAddressFeaturesKHR;
-VkPhysicalDeviceBufferDeviceAddressFeaturesKHR = record
-end;
-
-
 PVkPhysicalDeviceBufferDeviceAddressFeaturesEXT  =  ^VkPhysicalDeviceBufferDeviceAddressFeaturesEXT;
 PPVkPhysicalDeviceBufferDeviceAddressFeaturesEXT = ^PVkPhysicalDeviceBufferDeviceAddressFeaturesEXT;
 VkPhysicalDeviceBufferDeviceAddressFeaturesEXT = record
@@ -10311,12 +9691,6 @@ VkPhysicalDeviceBufferDeviceAddressFeaturesEXT = record
   bufferDeviceAddress: VkBool32;
   bufferDeviceAddressCaptureReplay: VkBool32;
   bufferDeviceAddressMultiDevice: VkBool32;
-end;
-
-
-PVkPhysicalDeviceBufferAddressFeaturesEXT  =  ^VkPhysicalDeviceBufferAddressFeaturesEXT;
-PPVkPhysicalDeviceBufferAddressFeaturesEXT = ^PVkPhysicalDeviceBufferAddressFeaturesEXT;
-VkPhysicalDeviceBufferAddressFeaturesEXT = record
 end;
 
 
@@ -10329,30 +9703,12 @@ VkBufferDeviceAddressInfo = record
 end;
 
 
-PVkBufferDeviceAddressInfoKHR  =  ^VkBufferDeviceAddressInfoKHR;
-PPVkBufferDeviceAddressInfoKHR = ^PVkBufferDeviceAddressInfoKHR;
-VkBufferDeviceAddressInfoKHR = record
-end;
-
-
-PVkBufferDeviceAddressInfoEXT  =  ^VkBufferDeviceAddressInfoEXT;
-PPVkBufferDeviceAddressInfoEXT = ^PVkBufferDeviceAddressInfoEXT;
-VkBufferDeviceAddressInfoEXT = record
-end;
-
-
 PVkBufferOpaqueCaptureAddressCreateInfo  =  ^VkBufferOpaqueCaptureAddressCreateInfo;
 PPVkBufferOpaqueCaptureAddressCreateInfo = ^PVkBufferOpaqueCaptureAddressCreateInfo;
 VkBufferOpaqueCaptureAddressCreateInfo = record
   sType: VkStructureType;
   pNext: Pointer;
   opaqueCaptureAddress: UInt64;
-end;
-
-
-PVkBufferOpaqueCaptureAddressCreateInfoKHR  =  ^VkBufferOpaqueCaptureAddressCreateInfoKHR;
-PPVkBufferOpaqueCaptureAddressCreateInfoKHR = ^PVkBufferOpaqueCaptureAddressCreateInfoKHR;
-VkBufferOpaqueCaptureAddressCreateInfoKHR = record
 end;
 
 
@@ -10393,12 +9749,6 @@ VkPhysicalDeviceImagelessFramebufferFeatures = record
 end;
 
 
-PVkPhysicalDeviceImagelessFramebufferFeaturesKHR  =  ^VkPhysicalDeviceImagelessFramebufferFeaturesKHR;
-PPVkPhysicalDeviceImagelessFramebufferFeaturesKHR = ^PVkPhysicalDeviceImagelessFramebufferFeaturesKHR;
-VkPhysicalDeviceImagelessFramebufferFeaturesKHR = record
-end;
-
-
 PVkFramebufferAttachmentImageInfo = ^VkFramebufferAttachmentImageInfo;
 PVkFramebufferAttachmentsCreateInfo  =  ^VkFramebufferAttachmentsCreateInfo;
 PPVkFramebufferAttachmentsCreateInfo = ^PVkFramebufferAttachmentsCreateInfo;
@@ -10407,12 +9757,6 @@ VkFramebufferAttachmentsCreateInfo = record
   pNext: Pointer;
   attachmentImageInfoCount: UInt32;
   pAttachmentImageInfos: PVkFramebufferAttachmentImageInfo;
-end;
-
-
-PVkFramebufferAttachmentsCreateInfoKHR  =  ^VkFramebufferAttachmentsCreateInfoKHR;
-PPVkFramebufferAttachmentsCreateInfoKHR = ^PVkFramebufferAttachmentsCreateInfoKHR;
-VkFramebufferAttachmentsCreateInfoKHR = record
 end;
 
 
@@ -10430,12 +9774,6 @@ VkFramebufferAttachmentImageInfo = record
 end;
 
 
-PVkFramebufferAttachmentImageInfoKHR  =  ^VkFramebufferAttachmentImageInfoKHR;
-PPVkFramebufferAttachmentImageInfoKHR = ^PVkFramebufferAttachmentImageInfoKHR;
-VkFramebufferAttachmentImageInfoKHR = record
-end;
-
-
 PVkRenderPassAttachmentBeginInfo  =  ^VkRenderPassAttachmentBeginInfo;
 PPVkRenderPassAttachmentBeginInfo = ^PVkRenderPassAttachmentBeginInfo;
 VkRenderPassAttachmentBeginInfo = record
@@ -10443,12 +9781,6 @@ VkRenderPassAttachmentBeginInfo = record
   pNext: Pointer;
   attachmentCount: UInt32;
   pAttachments: PVkImageView;
-end;
-
-
-PVkRenderPassAttachmentBeginInfoKHR  =  ^VkRenderPassAttachmentBeginInfoKHR;
-PPVkRenderPassAttachmentBeginInfoKHR = ^PVkRenderPassAttachmentBeginInfoKHR;
-VkRenderPassAttachmentBeginInfoKHR = record
 end;
 
 
@@ -10626,6 +9958,19 @@ VkQueryPoolPerformanceCreateInfoKHR = record
 end;
 
 
+PVkPerformanceCounterResultKHR  =  ^VkPerformanceCounterResultKHR;
+PPVkPerformanceCounterResultKHR = ^PVkPerformanceCounterResultKHR;
+VkPerformanceCounterResultKHR = record
+case Byte of
+  0: (int32: Int32);
+  1: (int64: Int64);
+  2: (uint32: UInt32);
+  3: (uint64: UInt64);
+  4: (float32: Single);
+  5: (float64: Double);
+end;
+
+
 PVkAcquireProfilingLockInfoKHR  =  ^VkAcquireProfilingLockInfoKHR;
 PPVkAcquireProfilingLockInfoKHR = ^PVkAcquireProfilingLockInfoKHR;
 VkAcquireProfilingLockInfoKHR = record
@@ -10694,6 +10039,18 @@ VkPhysicalDeviceShaderIntegerFunctions2FeaturesINTEL = record
 end;
 
 
+PVkPerformanceValueDataINTEL  =  ^VkPerformanceValueDataINTEL;
+PPVkPerformanceValueDataINTEL = ^PVkPerformanceValueDataINTEL;
+VkPerformanceValueDataINTEL = record
+case Byte of
+  0: (value32: UInt32);
+  1: (value64: UInt64);
+  2: (valueFloat: Single);
+  3: (valueBool: VkBool32);
+  4: (valueString: PAnsiChar);
+end;
+
+
 PVkPerformanceValueINTEL  =  ^VkPerformanceValueINTEL;
 PPVkPerformanceValueINTEL = ^PVkPerformanceValueINTEL;
 VkPerformanceValueINTEL = record
@@ -10717,12 +10074,6 @@ VkQueryPoolPerformanceQueryCreateInfoINTEL = record
   sType: VkStructureType;
   pNext: Pointer;
   performanceCountersSampling: VkQueryPoolSamplingModeINTEL;
-end;
-
-
-PVkQueryPoolCreateInfoINTEL  =  ^VkQueryPoolCreateInfoINTEL;
-PPVkQueryPoolCreateInfoINTEL = ^PVkQueryPoolCreateInfoINTEL;
-VkQueryPoolCreateInfoINTEL = record
 end;
 
 
@@ -10822,24 +10173,12 @@ VkPhysicalDeviceSeparateDepthStencilLayoutsFeatures = record
 end;
 
 
-PVkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR  =  ^VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR;
-PPVkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR = ^PVkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR;
-VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR = record
-end;
-
-
 PVkAttachmentReferenceStencilLayout  =  ^VkAttachmentReferenceStencilLayout;
 PPVkAttachmentReferenceStencilLayout = ^PVkAttachmentReferenceStencilLayout;
 VkAttachmentReferenceStencilLayout = record
   sType: VkStructureType;
   pNext: Pointer;
   stencilLayout: VkImageLayout;
-end;
-
-
-PVkAttachmentReferenceStencilLayoutKHR  =  ^VkAttachmentReferenceStencilLayoutKHR;
-PPVkAttachmentReferenceStencilLayoutKHR = ^PVkAttachmentReferenceStencilLayoutKHR;
-VkAttachmentReferenceStencilLayoutKHR = record
 end;
 
 
@@ -10850,12 +10189,6 @@ VkAttachmentDescriptionStencilLayout = record
   pNext: Pointer;
   stencilInitialLayout: VkImageLayout;
   stencilFinalLayout: VkImageLayout;
-end;
-
-
-PVkAttachmentDescriptionStencilLayoutKHR  =  ^VkAttachmentDescriptionStencilLayoutKHR;
-PPVkAttachmentDescriptionStencilLayoutKHR = ^PVkAttachmentDescriptionStencilLayoutKHR;
-VkAttachmentDescriptionStencilLayoutKHR = record
 end;
 
 
@@ -10896,6 +10229,17 @@ VkPipelineExecutableInfoKHR = record
   pNext: Pointer;
   pipeline: VkPipeline;
   executableIndex: UInt32;
+end;
+
+
+PVkPipelineExecutableStatisticValueKHR  =  ^VkPipelineExecutableStatisticValueKHR;
+PPVkPipelineExecutableStatisticValueKHR = ^PVkPipelineExecutableStatisticValueKHR;
+VkPipelineExecutableStatisticValueKHR = record
+case Byte of
+  0: (b32: VkBool32);
+  1: (i64: Int64);
+  2: (u64: UInt64);
+  3: (f64: Double);
 end;
 
 
@@ -11013,24 +10357,12 @@ VkMemoryOpaqueCaptureAddressAllocateInfo = record
 end;
 
 
-PVkMemoryOpaqueCaptureAddressAllocateInfoKHR  =  ^VkMemoryOpaqueCaptureAddressAllocateInfoKHR;
-PPVkMemoryOpaqueCaptureAddressAllocateInfoKHR = ^PVkMemoryOpaqueCaptureAddressAllocateInfoKHR;
-VkMemoryOpaqueCaptureAddressAllocateInfoKHR = record
-end;
-
-
 PVkDeviceMemoryOpaqueCaptureAddressInfo  =  ^VkDeviceMemoryOpaqueCaptureAddressInfo;
 PPVkDeviceMemoryOpaqueCaptureAddressInfo = ^PVkDeviceMemoryOpaqueCaptureAddressInfo;
 VkDeviceMemoryOpaqueCaptureAddressInfo = record
   sType: VkStructureType;
   pNext: Pointer;
   memory: VkDeviceMemory;
-end;
-
-
-PVkDeviceMemoryOpaqueCaptureAddressInfoKHR  =  ^VkDeviceMemoryOpaqueCaptureAddressInfoKHR;
-PPVkDeviceMemoryOpaqueCaptureAddressInfoKHR = ^PVkDeviceMemoryOpaqueCaptureAddressInfoKHR;
-VkDeviceMemoryOpaqueCaptureAddressInfoKHR = record
 end;
 
 
@@ -11296,6 +10628,24 @@ VkPhysicalDeviceCustomBorderColorFeaturesEXT = record
 end;
 
 
+PVkDeviceOrHostAddressKHR  =  ^VkDeviceOrHostAddressKHR;
+PPVkDeviceOrHostAddressKHR = ^PVkDeviceOrHostAddressKHR;
+VkDeviceOrHostAddressKHR = record
+case Byte of
+  0: (deviceAddress: VkDeviceAddress);
+  1: (hostAddress: Pointer);
+end;
+
+
+PVkDeviceOrHostAddressConstKHR  =  ^VkDeviceOrHostAddressConstKHR;
+PPVkDeviceOrHostAddressConstKHR = ^PVkDeviceOrHostAddressConstKHR;
+VkDeviceOrHostAddressConstKHR = record
+case Byte of
+  0: (deviceAddress: VkDeviceAddress);
+  1: (hostAddress: Pointer);
+end;
+
+
 PVkAccelerationStructureGeometryTrianglesDataKHR  =  ^VkAccelerationStructureGeometryTrianglesDataKHR;
 PPVkAccelerationStructureGeometryTrianglesDataKHR = ^PVkAccelerationStructureGeometryTrianglesDataKHR;
 VkAccelerationStructureGeometryTrianglesDataKHR = record
@@ -11328,6 +10678,16 @@ VkAccelerationStructureGeometryInstancesDataKHR = record
   pNext: Pointer;
   arrayOfPointers: VkBool32;
   data: VkDeviceOrHostAddressConstKHR;
+end;
+
+
+PVkAccelerationStructureGeometryDataKHR  =  ^VkAccelerationStructureGeometryDataKHR;
+PPVkAccelerationStructureGeometryDataKHR = ^PVkAccelerationStructureGeometryDataKHR;
+VkAccelerationStructureGeometryDataKHR = record
+case Byte of
+  0: (triangles: VkAccelerationStructureGeometryTrianglesDataKHR);
+  1: (aabbs: VkAccelerationStructureGeometryAabbsDataKHR);
+  2: (instances: VkAccelerationStructureGeometryInstancesDataKHR);
 end;
 
 
@@ -11395,22 +10755,10 @@ VkAabbPositionsKHR = record
 end;
 
 
-PVkAabbPositionsNV  =  ^VkAabbPositionsNV;
-PPVkAabbPositionsNV = ^PVkAabbPositionsNV;
-VkAabbPositionsNV = record
-end;
-
-
 PVkTransformMatrixKHR  =  ^VkTransformMatrixKHR;
 PPVkTransformMatrixKHR = ^PVkTransformMatrixKHR;
 VkTransformMatrixKHR = record
-  matrix: array[0 .. 3*4 - 1] of Single;
-end;
-
-
-PVkTransformMatrixNV  =  ^VkTransformMatrixNV;
-PPVkTransformMatrixNV = ^PVkTransformMatrixNV;
-VkTransformMatrixNV = record
+  matrix: array[0 .. 3 - 1] of array[0 .. 4 - 1] of Single;
 end;
 
 
@@ -11423,12 +10771,6 @@ VkAccelerationStructureInstanceKHR = record
   instanceShaderBindingTableRecordOffset: UInt32;
   flags: VkGeometryInstanceFlagsKHR;
   accelerationStructureReference: UInt64;
-end;
-
-
-PVkAccelerationStructureInstanceNV  =  ^VkAccelerationStructureInstanceNV;
-PPVkAccelerationStructureInstanceNV = ^PVkAccelerationStructureInstanceNV;
-VkAccelerationStructureInstanceNV = record
 end;
 
 
@@ -12634,6 +11976,16 @@ VkAccelerationStructureMatrixMotionInstanceNV = record
 end;
 
 
+PVkAccelerationStructureMotionInstanceDataNV  =  ^VkAccelerationStructureMotionInstanceDataNV;
+PPVkAccelerationStructureMotionInstanceDataNV = ^PVkAccelerationStructureMotionInstanceDataNV;
+VkAccelerationStructureMotionInstanceDataNV = record
+case Byte of
+  0: (staticInstance: VkAccelerationStructureInstanceKHR);
+  1: (matrixMotionInstance: VkAccelerationStructureMatrixMotionInstanceNV);
+  2: (srtMotionInstance: VkAccelerationStructureSRTMotionInstanceNV);
+end;
+
+
 PVkAccelerationStructureMotionInstanceNV  =  ^VkAccelerationStructureMotionInstanceNV;
 PPVkAccelerationStructureMotionInstanceNV = ^PVkAccelerationStructureMotionInstanceNV;
 VkAccelerationStructureMotionInstanceNV = record
@@ -12651,6 +12003,364 @@ VkMemoryGetRemoteAddressInfoNV = record
   memory: VkDeviceMemory;
   handleType: VkExternalMemoryHandleTypeFlagBits;
 end;
+
+VkPhysicalDeviceFeatures2KHR = VkPhysicalDeviceFeatures2;
+PVkPhysicalDeviceFeatures2KHR = ^VkPhysicalDeviceFeatures2KHR;
+PPVkPhysicalDeviceFeatures2KHR = ^PVkPhysicalDeviceFeatures2KHR;
+VkPhysicalDeviceProperties2KHR = VkPhysicalDeviceProperties2;
+PVkPhysicalDeviceProperties2KHR = ^VkPhysicalDeviceProperties2KHR;
+PPVkPhysicalDeviceProperties2KHR = ^PVkPhysicalDeviceProperties2KHR;
+VkFormatProperties2KHR = VkFormatProperties2;
+PVkFormatProperties2KHR = ^VkFormatProperties2KHR;
+PPVkFormatProperties2KHR = ^PVkFormatProperties2KHR;
+VkImageFormatProperties2KHR = VkImageFormatProperties2;
+PVkImageFormatProperties2KHR = ^VkImageFormatProperties2KHR;
+PPVkImageFormatProperties2KHR = ^PVkImageFormatProperties2KHR;
+VkPhysicalDeviceImageFormatInfo2KHR = VkPhysicalDeviceImageFormatInfo2;
+PVkPhysicalDeviceImageFormatInfo2KHR = ^VkPhysicalDeviceImageFormatInfo2KHR;
+PPVkPhysicalDeviceImageFormatInfo2KHR = ^PVkPhysicalDeviceImageFormatInfo2KHR;
+VkQueueFamilyProperties2KHR = VkQueueFamilyProperties2;
+PVkQueueFamilyProperties2KHR = ^VkQueueFamilyProperties2KHR;
+PPVkQueueFamilyProperties2KHR = ^PVkQueueFamilyProperties2KHR;
+VkPhysicalDeviceMemoryProperties2KHR = VkPhysicalDeviceMemoryProperties2;
+PVkPhysicalDeviceMemoryProperties2KHR = ^VkPhysicalDeviceMemoryProperties2KHR;
+PPVkPhysicalDeviceMemoryProperties2KHR = ^PVkPhysicalDeviceMemoryProperties2KHR;
+VkSparseImageFormatProperties2KHR = VkSparseImageFormatProperties2;
+PVkSparseImageFormatProperties2KHR = ^VkSparseImageFormatProperties2KHR;
+PPVkSparseImageFormatProperties2KHR = ^PVkSparseImageFormatProperties2KHR;
+VkPhysicalDeviceSparseImageFormatInfo2KHR = VkPhysicalDeviceSparseImageFormatInfo2;
+PVkPhysicalDeviceSparseImageFormatInfo2KHR = ^VkPhysicalDeviceSparseImageFormatInfo2KHR;
+PPVkPhysicalDeviceSparseImageFormatInfo2KHR = ^PVkPhysicalDeviceSparseImageFormatInfo2KHR;
+VkConformanceVersionKHR = VkConformanceVersion;
+PVkConformanceVersionKHR = ^VkConformanceVersionKHR;
+PPVkConformanceVersionKHR = ^PVkConformanceVersionKHR;
+VkPhysicalDeviceDriverPropertiesKHR = VkPhysicalDeviceDriverProperties;
+PVkPhysicalDeviceDriverPropertiesKHR = ^VkPhysicalDeviceDriverPropertiesKHR;
+PPVkPhysicalDeviceDriverPropertiesKHR = ^PVkPhysicalDeviceDriverPropertiesKHR;
+VkPhysicalDeviceVariablePointersFeaturesKHR = VkPhysicalDeviceVariablePointersFeatures;
+PVkPhysicalDeviceVariablePointersFeaturesKHR = ^VkPhysicalDeviceVariablePointersFeaturesKHR;
+PPVkPhysicalDeviceVariablePointersFeaturesKHR = ^PVkPhysicalDeviceVariablePointersFeaturesKHR;
+VkPhysicalDeviceVariablePointerFeaturesKHR = VkPhysicalDeviceVariablePointersFeatures;
+PVkPhysicalDeviceVariablePointerFeaturesKHR = ^VkPhysicalDeviceVariablePointerFeaturesKHR;
+PPVkPhysicalDeviceVariablePointerFeaturesKHR = ^PVkPhysicalDeviceVariablePointerFeaturesKHR;
+VkPhysicalDeviceVariablePointerFeatures = VkPhysicalDeviceVariablePointersFeatures;
+PVkPhysicalDeviceVariablePointerFeatures = ^VkPhysicalDeviceVariablePointerFeatures;
+PPVkPhysicalDeviceVariablePointerFeatures = ^PVkPhysicalDeviceVariablePointerFeatures;
+VkExternalMemoryPropertiesKHR = VkExternalMemoryProperties;
+PVkExternalMemoryPropertiesKHR = ^VkExternalMemoryPropertiesKHR;
+PPVkExternalMemoryPropertiesKHR = ^PVkExternalMemoryPropertiesKHR;
+VkPhysicalDeviceExternalImageFormatInfoKHR = VkPhysicalDeviceExternalImageFormatInfo;
+PVkPhysicalDeviceExternalImageFormatInfoKHR = ^VkPhysicalDeviceExternalImageFormatInfoKHR;
+PPVkPhysicalDeviceExternalImageFormatInfoKHR = ^PVkPhysicalDeviceExternalImageFormatInfoKHR;
+VkExternalImageFormatPropertiesKHR = VkExternalImageFormatProperties;
+PVkExternalImageFormatPropertiesKHR = ^VkExternalImageFormatPropertiesKHR;
+PPVkExternalImageFormatPropertiesKHR = ^PVkExternalImageFormatPropertiesKHR;
+VkPhysicalDeviceExternalBufferInfoKHR = VkPhysicalDeviceExternalBufferInfo;
+PVkPhysicalDeviceExternalBufferInfoKHR = ^VkPhysicalDeviceExternalBufferInfoKHR;
+PPVkPhysicalDeviceExternalBufferInfoKHR = ^PVkPhysicalDeviceExternalBufferInfoKHR;
+VkExternalBufferPropertiesKHR = VkExternalBufferProperties;
+PVkExternalBufferPropertiesKHR = ^VkExternalBufferPropertiesKHR;
+PPVkExternalBufferPropertiesKHR = ^PVkExternalBufferPropertiesKHR;
+VkPhysicalDeviceIDPropertiesKHR = VkPhysicalDeviceIDProperties;
+PVkPhysicalDeviceIDPropertiesKHR = ^VkPhysicalDeviceIDPropertiesKHR;
+PPVkPhysicalDeviceIDPropertiesKHR = ^PVkPhysicalDeviceIDPropertiesKHR;
+VkExternalMemoryImageCreateInfoKHR = VkExternalMemoryImageCreateInfo;
+PVkExternalMemoryImageCreateInfoKHR = ^VkExternalMemoryImageCreateInfoKHR;
+PPVkExternalMemoryImageCreateInfoKHR = ^PVkExternalMemoryImageCreateInfoKHR;
+VkExternalMemoryBufferCreateInfoKHR = VkExternalMemoryBufferCreateInfo;
+PVkExternalMemoryBufferCreateInfoKHR = ^VkExternalMemoryBufferCreateInfoKHR;
+PPVkExternalMemoryBufferCreateInfoKHR = ^PVkExternalMemoryBufferCreateInfoKHR;
+VkExportMemoryAllocateInfoKHR = VkExportMemoryAllocateInfo;
+PVkExportMemoryAllocateInfoKHR = ^VkExportMemoryAllocateInfoKHR;
+PPVkExportMemoryAllocateInfoKHR = ^PVkExportMemoryAllocateInfoKHR;
+VkPhysicalDeviceExternalSemaphoreInfoKHR = VkPhysicalDeviceExternalSemaphoreInfo;
+PVkPhysicalDeviceExternalSemaphoreInfoKHR = ^VkPhysicalDeviceExternalSemaphoreInfoKHR;
+PPVkPhysicalDeviceExternalSemaphoreInfoKHR = ^PVkPhysicalDeviceExternalSemaphoreInfoKHR;
+VkExternalSemaphorePropertiesKHR = VkExternalSemaphoreProperties;
+PVkExternalSemaphorePropertiesKHR = ^VkExternalSemaphorePropertiesKHR;
+PPVkExternalSemaphorePropertiesKHR = ^PVkExternalSemaphorePropertiesKHR;
+VkExportSemaphoreCreateInfoKHR = VkExportSemaphoreCreateInfo;
+PVkExportSemaphoreCreateInfoKHR = ^VkExportSemaphoreCreateInfoKHR;
+PPVkExportSemaphoreCreateInfoKHR = ^PVkExportSemaphoreCreateInfoKHR;
+VkPhysicalDeviceExternalFenceInfoKHR = VkPhysicalDeviceExternalFenceInfo;
+PVkPhysicalDeviceExternalFenceInfoKHR = ^VkPhysicalDeviceExternalFenceInfoKHR;
+PPVkPhysicalDeviceExternalFenceInfoKHR = ^PVkPhysicalDeviceExternalFenceInfoKHR;
+VkExternalFencePropertiesKHR = VkExternalFenceProperties;
+PVkExternalFencePropertiesKHR = ^VkExternalFencePropertiesKHR;
+PPVkExternalFencePropertiesKHR = ^PVkExternalFencePropertiesKHR;
+VkExportFenceCreateInfoKHR = VkExportFenceCreateInfo;
+PVkExportFenceCreateInfoKHR = ^VkExportFenceCreateInfoKHR;
+PPVkExportFenceCreateInfoKHR = ^PVkExportFenceCreateInfoKHR;
+VkPhysicalDeviceMultiviewFeaturesKHR = VkPhysicalDeviceMultiviewFeatures;
+PVkPhysicalDeviceMultiviewFeaturesKHR = ^VkPhysicalDeviceMultiviewFeaturesKHR;
+PPVkPhysicalDeviceMultiviewFeaturesKHR = ^PVkPhysicalDeviceMultiviewFeaturesKHR;
+VkPhysicalDeviceMultiviewPropertiesKHR = VkPhysicalDeviceMultiviewProperties;
+PVkPhysicalDeviceMultiviewPropertiesKHR = ^VkPhysicalDeviceMultiviewPropertiesKHR;
+PPVkPhysicalDeviceMultiviewPropertiesKHR = ^PVkPhysicalDeviceMultiviewPropertiesKHR;
+VkRenderPassMultiviewCreateInfoKHR = VkRenderPassMultiviewCreateInfo;
+PVkRenderPassMultiviewCreateInfoKHR = ^VkRenderPassMultiviewCreateInfoKHR;
+PPVkRenderPassMultiviewCreateInfoKHR = ^PVkRenderPassMultiviewCreateInfoKHR;
+VkPhysicalDeviceGroupPropertiesKHR = VkPhysicalDeviceGroupProperties;
+PVkPhysicalDeviceGroupPropertiesKHR = ^VkPhysicalDeviceGroupPropertiesKHR;
+PPVkPhysicalDeviceGroupPropertiesKHR = ^PVkPhysicalDeviceGroupPropertiesKHR;
+VkMemoryAllocateFlagsInfoKHR = VkMemoryAllocateFlagsInfo;
+PVkMemoryAllocateFlagsInfoKHR = ^VkMemoryAllocateFlagsInfoKHR;
+PPVkMemoryAllocateFlagsInfoKHR = ^PVkMemoryAllocateFlagsInfoKHR;
+VkBindBufferMemoryInfoKHR = VkBindBufferMemoryInfo;
+PVkBindBufferMemoryInfoKHR = ^VkBindBufferMemoryInfoKHR;
+PPVkBindBufferMemoryInfoKHR = ^PVkBindBufferMemoryInfoKHR;
+VkBindBufferMemoryDeviceGroupInfoKHR = VkBindBufferMemoryDeviceGroupInfo;
+PVkBindBufferMemoryDeviceGroupInfoKHR = ^VkBindBufferMemoryDeviceGroupInfoKHR;
+PPVkBindBufferMemoryDeviceGroupInfoKHR = ^PVkBindBufferMemoryDeviceGroupInfoKHR;
+VkBindImageMemoryInfoKHR = VkBindImageMemoryInfo;
+PVkBindImageMemoryInfoKHR = ^VkBindImageMemoryInfoKHR;
+PPVkBindImageMemoryInfoKHR = ^PVkBindImageMemoryInfoKHR;
+VkBindImageMemoryDeviceGroupInfoKHR = VkBindImageMemoryDeviceGroupInfo;
+PVkBindImageMemoryDeviceGroupInfoKHR = ^VkBindImageMemoryDeviceGroupInfoKHR;
+PPVkBindImageMemoryDeviceGroupInfoKHR = ^PVkBindImageMemoryDeviceGroupInfoKHR;
+VkDeviceGroupRenderPassBeginInfoKHR = VkDeviceGroupRenderPassBeginInfo;
+PVkDeviceGroupRenderPassBeginInfoKHR = ^VkDeviceGroupRenderPassBeginInfoKHR;
+PPVkDeviceGroupRenderPassBeginInfoKHR = ^PVkDeviceGroupRenderPassBeginInfoKHR;
+VkDeviceGroupCommandBufferBeginInfoKHR = VkDeviceGroupCommandBufferBeginInfo;
+PVkDeviceGroupCommandBufferBeginInfoKHR = ^VkDeviceGroupCommandBufferBeginInfoKHR;
+PPVkDeviceGroupCommandBufferBeginInfoKHR = ^PVkDeviceGroupCommandBufferBeginInfoKHR;
+VkDeviceGroupSubmitInfoKHR = VkDeviceGroupSubmitInfo;
+PVkDeviceGroupSubmitInfoKHR = ^VkDeviceGroupSubmitInfoKHR;
+PPVkDeviceGroupSubmitInfoKHR = ^PVkDeviceGroupSubmitInfoKHR;
+VkDeviceGroupBindSparseInfoKHR = VkDeviceGroupBindSparseInfo;
+PVkDeviceGroupBindSparseInfoKHR = ^VkDeviceGroupBindSparseInfoKHR;
+PPVkDeviceGroupBindSparseInfoKHR = ^PVkDeviceGroupBindSparseInfoKHR;
+VkDeviceGroupDeviceCreateInfoKHR = VkDeviceGroupDeviceCreateInfo;
+PVkDeviceGroupDeviceCreateInfoKHR = ^VkDeviceGroupDeviceCreateInfoKHR;
+PPVkDeviceGroupDeviceCreateInfoKHR = ^PVkDeviceGroupDeviceCreateInfoKHR;
+VkDescriptorUpdateTemplateEntryKHR = VkDescriptorUpdateTemplateEntry;
+PVkDescriptorUpdateTemplateEntryKHR = ^VkDescriptorUpdateTemplateEntryKHR;
+PPVkDescriptorUpdateTemplateEntryKHR = ^PVkDescriptorUpdateTemplateEntryKHR;
+VkDescriptorUpdateTemplateCreateInfoKHR = VkDescriptorUpdateTemplateCreateInfo;
+PVkDescriptorUpdateTemplateCreateInfoKHR = ^VkDescriptorUpdateTemplateCreateInfoKHR;
+PPVkDescriptorUpdateTemplateCreateInfoKHR = ^PVkDescriptorUpdateTemplateCreateInfoKHR;
+VkInputAttachmentAspectReferenceKHR = VkInputAttachmentAspectReference;
+PVkInputAttachmentAspectReferenceKHR = ^VkInputAttachmentAspectReferenceKHR;
+PPVkInputAttachmentAspectReferenceKHR = ^PVkInputAttachmentAspectReferenceKHR;
+VkRenderPassInputAttachmentAspectCreateInfoKHR = VkRenderPassInputAttachmentAspectCreateInfo;
+PVkRenderPassInputAttachmentAspectCreateInfoKHR = ^VkRenderPassInputAttachmentAspectCreateInfoKHR;
+PPVkRenderPassInputAttachmentAspectCreateInfoKHR = ^PVkRenderPassInputAttachmentAspectCreateInfoKHR;
+VkPhysicalDevice16BitStorageFeaturesKHR = VkPhysicalDevice16BitStorageFeatures;
+PVkPhysicalDevice16BitStorageFeaturesKHR = ^VkPhysicalDevice16BitStorageFeaturesKHR;
+PPVkPhysicalDevice16BitStorageFeaturesKHR = ^PVkPhysicalDevice16BitStorageFeaturesKHR;
+VkPhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR = VkPhysicalDeviceShaderSubgroupExtendedTypesFeatures;
+PVkPhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR = ^VkPhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR;
+PPVkPhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR = ^PVkPhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR;
+VkBufferMemoryRequirementsInfo2KHR = VkBufferMemoryRequirementsInfo2;
+PVkBufferMemoryRequirementsInfo2KHR = ^VkBufferMemoryRequirementsInfo2KHR;
+PPVkBufferMemoryRequirementsInfo2KHR = ^PVkBufferMemoryRequirementsInfo2KHR;
+VkImageMemoryRequirementsInfo2KHR = VkImageMemoryRequirementsInfo2;
+PVkImageMemoryRequirementsInfo2KHR = ^VkImageMemoryRequirementsInfo2KHR;
+PPVkImageMemoryRequirementsInfo2KHR = ^PVkImageMemoryRequirementsInfo2KHR;
+VkImageSparseMemoryRequirementsInfo2KHR = VkImageSparseMemoryRequirementsInfo2;
+PVkImageSparseMemoryRequirementsInfo2KHR = ^VkImageSparseMemoryRequirementsInfo2KHR;
+PPVkImageSparseMemoryRequirementsInfo2KHR = ^PVkImageSparseMemoryRequirementsInfo2KHR;
+VkMemoryRequirements2KHR = VkMemoryRequirements2;
+PVkMemoryRequirements2KHR = ^VkMemoryRequirements2KHR;
+PPVkMemoryRequirements2KHR = ^PVkMemoryRequirements2KHR;
+VkSparseImageMemoryRequirements2KHR = VkSparseImageMemoryRequirements2;
+PVkSparseImageMemoryRequirements2KHR = ^VkSparseImageMemoryRequirements2KHR;
+PPVkSparseImageMemoryRequirements2KHR = ^PVkSparseImageMemoryRequirements2KHR;
+VkPhysicalDevicePointClippingPropertiesKHR = VkPhysicalDevicePointClippingProperties;
+PVkPhysicalDevicePointClippingPropertiesKHR = ^VkPhysicalDevicePointClippingPropertiesKHR;
+PPVkPhysicalDevicePointClippingPropertiesKHR = ^PVkPhysicalDevicePointClippingPropertiesKHR;
+VkMemoryDedicatedRequirementsKHR = VkMemoryDedicatedRequirements;
+PVkMemoryDedicatedRequirementsKHR = ^VkMemoryDedicatedRequirementsKHR;
+PPVkMemoryDedicatedRequirementsKHR = ^PVkMemoryDedicatedRequirementsKHR;
+VkMemoryDedicatedAllocateInfoKHR = VkMemoryDedicatedAllocateInfo;
+PVkMemoryDedicatedAllocateInfoKHR = ^VkMemoryDedicatedAllocateInfoKHR;
+PPVkMemoryDedicatedAllocateInfoKHR = ^PVkMemoryDedicatedAllocateInfoKHR;
+VkImageViewUsageCreateInfoKHR = VkImageViewUsageCreateInfo;
+PVkImageViewUsageCreateInfoKHR = ^VkImageViewUsageCreateInfoKHR;
+PPVkImageViewUsageCreateInfoKHR = ^PVkImageViewUsageCreateInfoKHR;
+VkPipelineTessellationDomainOriginStateCreateInfoKHR = VkPipelineTessellationDomainOriginStateCreateInfo;
+PVkPipelineTessellationDomainOriginStateCreateInfoKHR = ^VkPipelineTessellationDomainOriginStateCreateInfoKHR;
+PPVkPipelineTessellationDomainOriginStateCreateInfoKHR = ^PVkPipelineTessellationDomainOriginStateCreateInfoKHR;
+VkSamplerYcbcrConversionInfoKHR = VkSamplerYcbcrConversionInfo;
+PVkSamplerYcbcrConversionInfoKHR = ^VkSamplerYcbcrConversionInfoKHR;
+PPVkSamplerYcbcrConversionInfoKHR = ^PVkSamplerYcbcrConversionInfoKHR;
+VkSamplerYcbcrConversionCreateInfoKHR = VkSamplerYcbcrConversionCreateInfo;
+PVkSamplerYcbcrConversionCreateInfoKHR = ^VkSamplerYcbcrConversionCreateInfoKHR;
+PPVkSamplerYcbcrConversionCreateInfoKHR = ^PVkSamplerYcbcrConversionCreateInfoKHR;
+VkBindImagePlaneMemoryInfoKHR = VkBindImagePlaneMemoryInfo;
+PVkBindImagePlaneMemoryInfoKHR = ^VkBindImagePlaneMemoryInfoKHR;
+PPVkBindImagePlaneMemoryInfoKHR = ^PVkBindImagePlaneMemoryInfoKHR;
+VkImagePlaneMemoryRequirementsInfoKHR = VkImagePlaneMemoryRequirementsInfo;
+PVkImagePlaneMemoryRequirementsInfoKHR = ^VkImagePlaneMemoryRequirementsInfoKHR;
+PPVkImagePlaneMemoryRequirementsInfoKHR = ^PVkImagePlaneMemoryRequirementsInfoKHR;
+VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR = VkPhysicalDeviceSamplerYcbcrConversionFeatures;
+PVkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR = ^VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR;
+PPVkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR = ^PVkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR;
+VkSamplerYcbcrConversionImageFormatPropertiesKHR = VkSamplerYcbcrConversionImageFormatProperties;
+PVkSamplerYcbcrConversionImageFormatPropertiesKHR = ^VkSamplerYcbcrConversionImageFormatPropertiesKHR;
+PPVkSamplerYcbcrConversionImageFormatPropertiesKHR = ^PVkSamplerYcbcrConversionImageFormatPropertiesKHR;
+VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT = VkPhysicalDeviceSamplerFilterMinmaxProperties;
+PVkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT = ^VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT;
+PPVkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT = ^PVkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT;
+VkSamplerReductionModeCreateInfoEXT = VkSamplerReductionModeCreateInfo;
+PVkSamplerReductionModeCreateInfoEXT = ^VkSamplerReductionModeCreateInfoEXT;
+PPVkSamplerReductionModeCreateInfoEXT = ^PVkSamplerReductionModeCreateInfoEXT;
+VkImageFormatListCreateInfoKHR = VkImageFormatListCreateInfo;
+PVkImageFormatListCreateInfoKHR = ^VkImageFormatListCreateInfoKHR;
+PPVkImageFormatListCreateInfoKHR = ^PVkImageFormatListCreateInfoKHR;
+VkPhysicalDeviceMaintenance3PropertiesKHR = VkPhysicalDeviceMaintenance3Properties;
+PVkPhysicalDeviceMaintenance3PropertiesKHR = ^VkPhysicalDeviceMaintenance3PropertiesKHR;
+PPVkPhysicalDeviceMaintenance3PropertiesKHR = ^PVkPhysicalDeviceMaintenance3PropertiesKHR;
+VkDescriptorSetLayoutSupportKHR = VkDescriptorSetLayoutSupport;
+PVkDescriptorSetLayoutSupportKHR = ^VkDescriptorSetLayoutSupportKHR;
+PPVkDescriptorSetLayoutSupportKHR = ^PVkDescriptorSetLayoutSupportKHR;
+VkPhysicalDeviceShaderDrawParameterFeatures = VkPhysicalDeviceShaderDrawParametersFeatures;
+PVkPhysicalDeviceShaderDrawParameterFeatures = ^VkPhysicalDeviceShaderDrawParameterFeatures;
+PPVkPhysicalDeviceShaderDrawParameterFeatures = ^PVkPhysicalDeviceShaderDrawParameterFeatures;
+VkPhysicalDeviceShaderFloat16Int8FeaturesKHR = VkPhysicalDeviceShaderFloat16Int8Features;
+PVkPhysicalDeviceShaderFloat16Int8FeaturesKHR = ^VkPhysicalDeviceShaderFloat16Int8FeaturesKHR;
+PPVkPhysicalDeviceShaderFloat16Int8FeaturesKHR = ^PVkPhysicalDeviceShaderFloat16Int8FeaturesKHR;
+VkPhysicalDeviceFloat16Int8FeaturesKHR = VkPhysicalDeviceShaderFloat16Int8Features;
+PVkPhysicalDeviceFloat16Int8FeaturesKHR = ^VkPhysicalDeviceFloat16Int8FeaturesKHR;
+PPVkPhysicalDeviceFloat16Int8FeaturesKHR = ^PVkPhysicalDeviceFloat16Int8FeaturesKHR;
+VkPhysicalDeviceFloatControlsPropertiesKHR = VkPhysicalDeviceFloatControlsProperties;
+PVkPhysicalDeviceFloatControlsPropertiesKHR = ^VkPhysicalDeviceFloatControlsPropertiesKHR;
+PPVkPhysicalDeviceFloatControlsPropertiesKHR = ^PVkPhysicalDeviceFloatControlsPropertiesKHR;
+VkPhysicalDeviceHostQueryResetFeaturesEXT = VkPhysicalDeviceHostQueryResetFeatures;
+PVkPhysicalDeviceHostQueryResetFeaturesEXT = ^VkPhysicalDeviceHostQueryResetFeaturesEXT;
+PPVkPhysicalDeviceHostQueryResetFeaturesEXT = ^PVkPhysicalDeviceHostQueryResetFeaturesEXT;
+VkPhysicalDeviceDescriptorIndexingFeaturesEXT = VkPhysicalDeviceDescriptorIndexingFeatures;
+PVkPhysicalDeviceDescriptorIndexingFeaturesEXT = ^VkPhysicalDeviceDescriptorIndexingFeaturesEXT;
+PPVkPhysicalDeviceDescriptorIndexingFeaturesEXT = ^PVkPhysicalDeviceDescriptorIndexingFeaturesEXT;
+VkPhysicalDeviceDescriptorIndexingPropertiesEXT = VkPhysicalDeviceDescriptorIndexingProperties;
+PVkPhysicalDeviceDescriptorIndexingPropertiesEXT = ^VkPhysicalDeviceDescriptorIndexingPropertiesEXT;
+PPVkPhysicalDeviceDescriptorIndexingPropertiesEXT = ^PVkPhysicalDeviceDescriptorIndexingPropertiesEXT;
+VkDescriptorSetLayoutBindingFlagsCreateInfoEXT = VkDescriptorSetLayoutBindingFlagsCreateInfo;
+PVkDescriptorSetLayoutBindingFlagsCreateInfoEXT = ^VkDescriptorSetLayoutBindingFlagsCreateInfoEXT;
+PPVkDescriptorSetLayoutBindingFlagsCreateInfoEXT = ^PVkDescriptorSetLayoutBindingFlagsCreateInfoEXT;
+VkDescriptorSetVariableDescriptorCountAllocateInfoEXT = VkDescriptorSetVariableDescriptorCountAllocateInfo;
+PVkDescriptorSetVariableDescriptorCountAllocateInfoEXT = ^VkDescriptorSetVariableDescriptorCountAllocateInfoEXT;
+PPVkDescriptorSetVariableDescriptorCountAllocateInfoEXT = ^PVkDescriptorSetVariableDescriptorCountAllocateInfoEXT;
+VkDescriptorSetVariableDescriptorCountLayoutSupportEXT = VkDescriptorSetVariableDescriptorCountLayoutSupport;
+PVkDescriptorSetVariableDescriptorCountLayoutSupportEXT = ^VkDescriptorSetVariableDescriptorCountLayoutSupportEXT;
+PPVkDescriptorSetVariableDescriptorCountLayoutSupportEXT = ^PVkDescriptorSetVariableDescriptorCountLayoutSupportEXT;
+VkAttachmentDescription2KHR = VkAttachmentDescription2;
+PVkAttachmentDescription2KHR = ^VkAttachmentDescription2KHR;
+PPVkAttachmentDescription2KHR = ^PVkAttachmentDescription2KHR;
+VkAttachmentReference2KHR = VkAttachmentReference2;
+PVkAttachmentReference2KHR = ^VkAttachmentReference2KHR;
+PPVkAttachmentReference2KHR = ^PVkAttachmentReference2KHR;
+VkSubpassDescription2KHR = VkSubpassDescription2;
+PVkSubpassDescription2KHR = ^VkSubpassDescription2KHR;
+PPVkSubpassDescription2KHR = ^PVkSubpassDescription2KHR;
+VkSubpassDependency2KHR = VkSubpassDependency2;
+PVkSubpassDependency2KHR = ^VkSubpassDependency2KHR;
+PPVkSubpassDependency2KHR = ^PVkSubpassDependency2KHR;
+VkRenderPassCreateInfo2KHR = VkRenderPassCreateInfo2;
+PVkRenderPassCreateInfo2KHR = ^VkRenderPassCreateInfo2KHR;
+PPVkRenderPassCreateInfo2KHR = ^PVkRenderPassCreateInfo2KHR;
+VkSubpassBeginInfoKHR = VkSubpassBeginInfo;
+PVkSubpassBeginInfoKHR = ^VkSubpassBeginInfoKHR;
+PPVkSubpassBeginInfoKHR = ^PVkSubpassBeginInfoKHR;
+VkSubpassEndInfoKHR = VkSubpassEndInfo;
+PVkSubpassEndInfoKHR = ^VkSubpassEndInfoKHR;
+PPVkSubpassEndInfoKHR = ^PVkSubpassEndInfoKHR;
+VkPhysicalDeviceTimelineSemaphoreFeaturesKHR = VkPhysicalDeviceTimelineSemaphoreFeatures;
+PVkPhysicalDeviceTimelineSemaphoreFeaturesKHR = ^VkPhysicalDeviceTimelineSemaphoreFeaturesKHR;
+PPVkPhysicalDeviceTimelineSemaphoreFeaturesKHR = ^PVkPhysicalDeviceTimelineSemaphoreFeaturesKHR;
+VkPhysicalDeviceTimelineSemaphorePropertiesKHR = VkPhysicalDeviceTimelineSemaphoreProperties;
+PVkPhysicalDeviceTimelineSemaphorePropertiesKHR = ^VkPhysicalDeviceTimelineSemaphorePropertiesKHR;
+PPVkPhysicalDeviceTimelineSemaphorePropertiesKHR = ^PVkPhysicalDeviceTimelineSemaphorePropertiesKHR;
+VkSemaphoreTypeCreateInfoKHR = VkSemaphoreTypeCreateInfo;
+PVkSemaphoreTypeCreateInfoKHR = ^VkSemaphoreTypeCreateInfoKHR;
+PPVkSemaphoreTypeCreateInfoKHR = ^PVkSemaphoreTypeCreateInfoKHR;
+VkTimelineSemaphoreSubmitInfoKHR = VkTimelineSemaphoreSubmitInfo;
+PVkTimelineSemaphoreSubmitInfoKHR = ^VkTimelineSemaphoreSubmitInfoKHR;
+PPVkTimelineSemaphoreSubmitInfoKHR = ^PVkTimelineSemaphoreSubmitInfoKHR;
+VkSemaphoreWaitInfoKHR = VkSemaphoreWaitInfo;
+PVkSemaphoreWaitInfoKHR = ^VkSemaphoreWaitInfoKHR;
+PPVkSemaphoreWaitInfoKHR = ^PVkSemaphoreWaitInfoKHR;
+VkSemaphoreSignalInfoKHR = VkSemaphoreSignalInfo;
+PVkSemaphoreSignalInfoKHR = ^VkSemaphoreSignalInfoKHR;
+PPVkSemaphoreSignalInfoKHR = ^PVkSemaphoreSignalInfoKHR;
+VkPhysicalDevice8BitStorageFeaturesKHR = VkPhysicalDevice8BitStorageFeatures;
+PVkPhysicalDevice8BitStorageFeaturesKHR = ^VkPhysicalDevice8BitStorageFeaturesKHR;
+PPVkPhysicalDevice8BitStorageFeaturesKHR = ^PVkPhysicalDevice8BitStorageFeaturesKHR;
+VkPhysicalDeviceVulkanMemoryModelFeaturesKHR = VkPhysicalDeviceVulkanMemoryModelFeatures;
+PVkPhysicalDeviceVulkanMemoryModelFeaturesKHR = ^VkPhysicalDeviceVulkanMemoryModelFeaturesKHR;
+PPVkPhysicalDeviceVulkanMemoryModelFeaturesKHR = ^PVkPhysicalDeviceVulkanMemoryModelFeaturesKHR;
+VkPhysicalDeviceShaderAtomicInt64FeaturesKHR = VkPhysicalDeviceShaderAtomicInt64Features;
+PVkPhysicalDeviceShaderAtomicInt64FeaturesKHR = ^VkPhysicalDeviceShaderAtomicInt64FeaturesKHR;
+PPVkPhysicalDeviceShaderAtomicInt64FeaturesKHR = ^PVkPhysicalDeviceShaderAtomicInt64FeaturesKHR;
+VkPhysicalDeviceDepthStencilResolvePropertiesKHR = VkPhysicalDeviceDepthStencilResolveProperties;
+PVkPhysicalDeviceDepthStencilResolvePropertiesKHR = ^VkPhysicalDeviceDepthStencilResolvePropertiesKHR;
+PPVkPhysicalDeviceDepthStencilResolvePropertiesKHR = ^PVkPhysicalDeviceDepthStencilResolvePropertiesKHR;
+VkSubpassDescriptionDepthStencilResolveKHR = VkSubpassDescriptionDepthStencilResolve;
+PVkSubpassDescriptionDepthStencilResolveKHR = ^VkSubpassDescriptionDepthStencilResolveKHR;
+PPVkSubpassDescriptionDepthStencilResolveKHR = ^PVkSubpassDescriptionDepthStencilResolveKHR;
+VkImageStencilUsageCreateInfoEXT = VkImageStencilUsageCreateInfo;
+PVkImageStencilUsageCreateInfoEXT = ^VkImageStencilUsageCreateInfoEXT;
+PPVkImageStencilUsageCreateInfoEXT = ^PVkImageStencilUsageCreateInfoEXT;
+VkPhysicalDeviceScalarBlockLayoutFeaturesEXT = VkPhysicalDeviceScalarBlockLayoutFeatures;
+PVkPhysicalDeviceScalarBlockLayoutFeaturesEXT = ^VkPhysicalDeviceScalarBlockLayoutFeaturesEXT;
+PPVkPhysicalDeviceScalarBlockLayoutFeaturesEXT = ^PVkPhysicalDeviceScalarBlockLayoutFeaturesEXT;
+VkPhysicalDeviceUniformBufferStandardLayoutFeaturesKHR = VkPhysicalDeviceUniformBufferStandardLayoutFeatures;
+PVkPhysicalDeviceUniformBufferStandardLayoutFeaturesKHR = ^VkPhysicalDeviceUniformBufferStandardLayoutFeaturesKHR;
+PPVkPhysicalDeviceUniformBufferStandardLayoutFeaturesKHR = ^PVkPhysicalDeviceUniformBufferStandardLayoutFeaturesKHR;
+VkPhysicalDeviceBufferDeviceAddressFeaturesKHR = VkPhysicalDeviceBufferDeviceAddressFeatures;
+PVkPhysicalDeviceBufferDeviceAddressFeaturesKHR = ^VkPhysicalDeviceBufferDeviceAddressFeaturesKHR;
+PPVkPhysicalDeviceBufferDeviceAddressFeaturesKHR = ^PVkPhysicalDeviceBufferDeviceAddressFeaturesKHR;
+VkPhysicalDeviceBufferAddressFeaturesEXT = VkPhysicalDeviceBufferDeviceAddressFeaturesEXT;
+PVkPhysicalDeviceBufferAddressFeaturesEXT = ^VkPhysicalDeviceBufferAddressFeaturesEXT;
+PPVkPhysicalDeviceBufferAddressFeaturesEXT = ^PVkPhysicalDeviceBufferAddressFeaturesEXT;
+VkBufferDeviceAddressInfoKHR = VkBufferDeviceAddressInfo;
+PVkBufferDeviceAddressInfoKHR = ^VkBufferDeviceAddressInfoKHR;
+PPVkBufferDeviceAddressInfoKHR = ^PVkBufferDeviceAddressInfoKHR;
+VkBufferDeviceAddressInfoEXT = VkBufferDeviceAddressInfo;
+PVkBufferDeviceAddressInfoEXT = ^VkBufferDeviceAddressInfoEXT;
+PPVkBufferDeviceAddressInfoEXT = ^PVkBufferDeviceAddressInfoEXT;
+VkBufferOpaqueCaptureAddressCreateInfoKHR = VkBufferOpaqueCaptureAddressCreateInfo;
+PVkBufferOpaqueCaptureAddressCreateInfoKHR = ^VkBufferOpaqueCaptureAddressCreateInfoKHR;
+PPVkBufferOpaqueCaptureAddressCreateInfoKHR = ^PVkBufferOpaqueCaptureAddressCreateInfoKHR;
+VkPhysicalDeviceImagelessFramebufferFeaturesKHR = VkPhysicalDeviceImagelessFramebufferFeatures;
+PVkPhysicalDeviceImagelessFramebufferFeaturesKHR = ^VkPhysicalDeviceImagelessFramebufferFeaturesKHR;
+PPVkPhysicalDeviceImagelessFramebufferFeaturesKHR = ^PVkPhysicalDeviceImagelessFramebufferFeaturesKHR;
+VkFramebufferAttachmentsCreateInfoKHR = VkFramebufferAttachmentsCreateInfo;
+PVkFramebufferAttachmentsCreateInfoKHR = ^VkFramebufferAttachmentsCreateInfoKHR;
+PPVkFramebufferAttachmentsCreateInfoKHR = ^PVkFramebufferAttachmentsCreateInfoKHR;
+VkFramebufferAttachmentImageInfoKHR = VkFramebufferAttachmentImageInfo;
+PVkFramebufferAttachmentImageInfoKHR = ^VkFramebufferAttachmentImageInfoKHR;
+PPVkFramebufferAttachmentImageInfoKHR = ^PVkFramebufferAttachmentImageInfoKHR;
+VkRenderPassAttachmentBeginInfoKHR = VkRenderPassAttachmentBeginInfo;
+PVkRenderPassAttachmentBeginInfoKHR = ^VkRenderPassAttachmentBeginInfoKHR;
+PPVkRenderPassAttachmentBeginInfoKHR = ^PVkRenderPassAttachmentBeginInfoKHR;
+VkQueryPoolCreateInfoINTEL = VkQueryPoolPerformanceQueryCreateInfoINTEL;
+PVkQueryPoolCreateInfoINTEL = ^VkQueryPoolCreateInfoINTEL;
+PPVkQueryPoolCreateInfoINTEL = ^PVkQueryPoolCreateInfoINTEL;
+VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR = VkPhysicalDeviceSeparateDepthStencilLayoutsFeatures;
+PVkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR = ^VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR;
+PPVkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR = ^PVkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR;
+VkAttachmentReferenceStencilLayoutKHR = VkAttachmentReferenceStencilLayout;
+PVkAttachmentReferenceStencilLayoutKHR = ^VkAttachmentReferenceStencilLayoutKHR;
+PPVkAttachmentReferenceStencilLayoutKHR = ^PVkAttachmentReferenceStencilLayoutKHR;
+VkAttachmentDescriptionStencilLayoutKHR = VkAttachmentDescriptionStencilLayout;
+PVkAttachmentDescriptionStencilLayoutKHR = ^VkAttachmentDescriptionStencilLayoutKHR;
+PPVkAttachmentDescriptionStencilLayoutKHR = ^PVkAttachmentDescriptionStencilLayoutKHR;
+VkMemoryOpaqueCaptureAddressAllocateInfoKHR = VkMemoryOpaqueCaptureAddressAllocateInfo;
+PVkMemoryOpaqueCaptureAddressAllocateInfoKHR = ^VkMemoryOpaqueCaptureAddressAllocateInfoKHR;
+PPVkMemoryOpaqueCaptureAddressAllocateInfoKHR = ^PVkMemoryOpaqueCaptureAddressAllocateInfoKHR;
+VkDeviceMemoryOpaqueCaptureAddressInfoKHR = VkDeviceMemoryOpaqueCaptureAddressInfo;
+PVkDeviceMemoryOpaqueCaptureAddressInfoKHR = ^VkDeviceMemoryOpaqueCaptureAddressInfoKHR;
+PPVkDeviceMemoryOpaqueCaptureAddressInfoKHR = ^PVkDeviceMemoryOpaqueCaptureAddressInfoKHR;
+VkAabbPositionsNV = VkAabbPositionsKHR;
+PVkAabbPositionsNV = ^VkAabbPositionsNV;
+PPVkAabbPositionsNV = ^PVkAabbPositionsNV;
+VkTransformMatrixNV = VkTransformMatrixKHR;
+PVkTransformMatrixNV = ^VkTransformMatrixNV;
+PPVkTransformMatrixNV = ^PVkTransformMatrixNV;
+VkAccelerationStructureInstanceNV = VkAccelerationStructureInstanceKHR;
+PVkAccelerationStructureInstanceNV = ^VkAccelerationStructureInstanceNV;
+PPVkAccelerationStructureInstanceNV = ^PVkAccelerationStructureInstanceNV;
 
 PFN_vkCreateInstance = function  (
       pCreateInfo : PVkInstanceCreateInfo;
